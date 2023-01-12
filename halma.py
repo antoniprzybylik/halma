@@ -23,7 +23,9 @@ class game:
     def __init__(self):
         self._board = [[state.EMPTY]*16 for i in range(16)]
         self.supported_modes = ['classic']
+
         self.mode = None
+        self.move = 1  # Obecny ruch.
 
     def setup(self, mode):
         """
@@ -47,12 +49,12 @@ class game:
         used throught setup method.
         """
 
-        # Setup Black's camp.
+        # Ustawiamy obóz Czarnego.
         for i in range(0, 5):
             for j in range(0, [5, 5, 4, 3, 2][i]):
                 self._board[i][j] = state.BLACK
 
-        # Setup White's camp.
+        # Ustawiamy obóz Białego.
         for i in range(0, 5):
             for j in range(0, [5, 5, 4, 3, 2][i]):
                 self._board[15 - i][15 - j] = state.WHITE
@@ -101,9 +103,9 @@ class game:
 
                 possible.append((x+2*dx, y+2*dy))
 
-                # Avoid copying array.
-                # Append current position,
-                # then remove it.
+                # Unikamy kopiowania tablicy.
+                # Dodajemy tylko do niej obecną
+                # pozycję, a następnie ją usuwamy.
                 visited.append((x, y))
                 possible += self._moves(x+2*dx, y+2*dy, visited)
                 visited.pop()
