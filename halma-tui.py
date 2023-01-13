@@ -10,7 +10,6 @@ from halma import state
 # do wyjścia programu
 # w przypadku błędu.
 import curses
-from curses.textpad import Textbox, rectangle
 import sys
 
 
