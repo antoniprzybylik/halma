@@ -10,6 +10,7 @@ from halma import state
 # do wyjścia programu
 # w przypadku błędu.
 import curses
+from curses.textpad import Textbox, rectangle
 import sys
 
 
@@ -123,6 +124,50 @@ def print_label_row(stdscr, left_gap_str):
     stdscr.addstr('\n')
 
 
+def dialog(stdscr, text, size_y, size_x, attributes):
+    """! Wyświetla okno dialogowe na środku ekranu.
+
+    @param text Tekst w oknie.
+    @param minx Minimalna szerokość.
+
+    @return Tekst wprowadzony przez użytkownika.
+    """
+
+    screen_y, screen_x = stdscr.getmaxyx()
+
+    if (size_y < 7 or size_x < 8):
+        raise ValueError("Too small requested size of dialog box.")
+
+    if (size_y > screen_y or size_x > screen_x):
+        raise ValueError("Too large requested size of dialog box.")
+
+    pos_x = (screen_x - size_x) // 2
+    pos_y = (screen_y - size_y) // 2
+
+    dialog_box = curses.newwin(size_y, size_x, pos_y, pos_x)
+    dialog_box.bkgd(' ', attributes['DIALOG'])
+    dialog_box.addstr(1, 1, text)
+
+    input_window = dialog_box.subwin(3, size_x - 2,
+                                     pos_y + 3 + (size_y - 4 - 3) // 2,
+                                     pos_x + 1)
+    input_window.border()
+
+    input_field_window = input_window.subwin(1, size_x - 4,
+                                             pos_y + 4 + (size_y - 4 - 3) // 2,
+                                             pos_x + 2)
+    input_field_window.bkgd(' ', attributes['INPUT'])
+    input_field = curses.textpad.Textbox(input_field_window)
+
+    dialog_box.refresh()
+
+    curses.curs_set(1)
+    input_field.edit()
+    curses.curs_set(0)
+
+    return input_field.gather()
+
+
 def main(stdscr):
     """! Główna funkcja gry.
 
@@ -151,11 +196,11 @@ def main(stdscr):
                     for i in range(curses.COLORS)]
 
     # Kolory planszy.
-    # Zaczynają się od 240.
-    COLOR_BLACK_FIELD = 240
-    COLOR_WHITE_FIELD = 241
-    COLOR_WHITE_STONE = 242
-    COLOR_BLACK_STONE = 243
+    # Zaczynają się od 230.
+    COLOR_BLACK_FIELD = 230
+    COLOR_WHITE_FIELD = 231
+    COLOR_WHITE_STONE = 232
+    COLOR_BLACK_STONE = 233
 
     curses.init_color(COLOR_BLACK_FIELD, *curses_color(0x444444))
     curses.init_color(COLOR_WHITE_FIELD, *curses_color(0xa8a8a8))
@@ -169,15 +214,35 @@ def main(stdscr):
     curses.init_pair(4, COLOR_BLACK_STONE, COLOR_BLACK_FIELD)
 
     # Kolory nagłówka.
-    # Zaczynają się od 250
-    COLOR_HEADER_BG = 250
-    COLOR_HEADER_FG = 251
+    # Zaczynają się od 240
+    COLOR_HEADER_BG = 240
+    COLOR_HEADER_FG = 241
     curses.init_color(COLOR_HEADER_BG, *curses_color(0xeeeeee))
     curses.init_color(COLOR_HEADER_FG, *curses_color(0x502040))
 
     # Para kolorów nagłówka.
     curses.init_pair(11, COLOR_HEADER_FG, COLOR_HEADER_BG)
     header_attr = curses.color_pair(11)
+
+    # Kolory dialog boxa.
+    # Zaczynają się od 250
+    COLOR_DIALOG_BG = 250
+    COLOR_DIALOG_FG = 251
+    COLOR_INPUT_BG = 252
+    COLOR_INPUT_FG = 253
+    curses.init_color(COLOR_DIALOG_BG, *curses_color(0x666666))
+    curses.init_color(COLOR_DIALOG_FG, *curses_color(0x000000))
+    curses.init_color(COLOR_INPUT_BG, *curses_color(0x0000a0))
+    curses.init_color(COLOR_INPUT_FG, *curses_color(0xeeee00))
+
+    # Pary kolorów dialog boxa.
+    curses.init_pair(21, COLOR_DIALOG_FG, COLOR_DIALOG_BG)
+    curses.init_pair(22, COLOR_INPUT_FG, COLOR_INPUT_BG)
+
+    dialogbox_attributes = {
+            'DIALOG': curses.color_pair(21),
+            'INPUT': curses.color_pair(22),
+    }
 
     curses.curs_set(0)
     stdscr.clear()
@@ -257,7 +322,9 @@ def main(stdscr):
     print_label_row(stdscr, left_gap_str)
 
     stdscr.refresh()
-    stdscr.getkey()
+
+    msg = dialog(stdscr, 'Enter your move:',
+                 7, 30, dialogbox_attributes)
 
     # Przywracamy zapisane kolory.
     for i in range(curses.COLORS):

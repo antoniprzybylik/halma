@@ -30,6 +30,7 @@ class game:
         set_field()
         read_field()
     """
+    # TODO: Save.
 
     def __init__(self):
         """! Konstruktor klasy game. """
