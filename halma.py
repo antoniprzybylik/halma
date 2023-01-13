@@ -26,6 +26,7 @@ class Game:
 
     Metody publiczne:
         setup()
+        in_camp()
         moves()
         get_board()
         set_field()
@@ -111,6 +112,30 @@ class Game:
                     break
 
             self._board[i][j] = state.WHITE
+
+    def in_camp(self, x, y):
+        """! Sprawdza w jakim obozie znajduje się pole.
+
+        Zwraca 'w' jeśli w białym, 'b' jeśli w czarnym,
+        'n' jeśli w żadnym.
+
+        @param x Współrzędna X pola.
+        @param y Współrzędna Y pola.
+
+        @return W jakim obozie znajduje się pole.
+        """
+
+        # Sprawdzamy, czy jest w obozie Czarnego.
+        if (x in range(0, 5) and
+                y in range(0, [5, 5, 4, 3, 2][x])):
+            return 'b'
+
+        # Sprawdzamy, czy jest w obozie Białego.
+        if (x in range(11, 16) and
+                15-y in range(0, [5, 5, 4, 3, 2][15-x])):
+            return 'w'
+
+        return 'n'
 
     def moves(self, x, y):
         """! Znajduje wszystkie pola na które można wykonać ruch.

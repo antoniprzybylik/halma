@@ -229,36 +229,34 @@ class HalmaTui:
                 j = rj // 4
 
                 field_char = ' '
-                attr = None
+                attr_key = ''
 
-                if (board[i][j] == state.WHITE and
-                        (i+j) % 2 == 0):
-                    attr = self._gameboard_attrs['WW']
+                if (board[i][j] == state.WHITE):
+                    attr_key += 'WHITE'
                     field_char = 'w'
 
-                if (board[i][j] == state.WHITE and
-                        (i+j) % 2 == 1):
-                    attr = self._gameboard_attrs['WB']
-                    field_char = 'w'
-
-                if (board[i][j] == state.BLACK and
-                        (i+j) % 2 == 0):
-                    attr = self._gameboard_attrs['BW']
+                if (board[i][j] == state.BLACK):
+                    attr_key += 'BLACK'
                     field_char = 'm'
 
-                if (board[i][j] == state.BLACK and
-                        (i+j) % 2 == 1):
-                    attr = self._gameboard_attrs['BB']
-                    field_char = 'm'
+                if (board[i][j] == state.EMPTY):
+                    # I tak nie rysujemy pionka,
+                    # więc jego kolor nie ma
+                    # znaczenia.
+                    attr_key += 'WHITE'
 
-                if (board[i][j] == state.EMPTY and
-                        (i+j) % 2 == 0):
-                    attr = self._gameboard_attrs['WW']
+                if ((i+j) % 2 == 0):
+                    if (self._game.in_camp(i, j) != 'n'):
+                        attr_key += 'CYAN'
+                    else:
+                        attr_key += 'WHITE'
+                else:
+                    if (self._game.in_camp(i, j) != 'n'):
+                        attr_key += 'NAVY'
+                    else:
+                        attr_key += 'BLACK'
 
-                if (board[i][j] == state.EMPTY and
-                        (i+j) % 2 == 1):
-                    attr = self._gameboard_attrs['BB']
-
+                attr = self._gameboard_attrs.get(attr_key, None)
                 if (attr is None):
                     raise ValueError('Unknown field state.')
 
@@ -306,11 +304,15 @@ class HalmaTui:
         # Zaczynają się od 230.
         COLOR_BLACK_FIELD = 230
         COLOR_WHITE_FIELD = 231
-        COLOR_WHITE_STONE = 232
-        COLOR_BLACK_STONE = 233
+        COLOR_BLACK_CAMP  = 232 # noqa: E261 E221
+        COLOR_WHITE_CAMP  = 233 # noqa: E261 E221
+        COLOR_WHITE_STONE = 234
+        COLOR_BLACK_STONE = 235
 
         curses.init_color(COLOR_BLACK_FIELD, *self._curses_color(0x444444))
         curses.init_color(COLOR_WHITE_FIELD, *self._curses_color(0xa8a8a8))
+        curses.init_color(COLOR_BLACK_CAMP, *self._curses_color(0x0f0fff))
+        curses.init_color(COLOR_WHITE_CAMP, *self._curses_color(0x4040ff))
         curses.init_color(COLOR_WHITE_STONE, *self._curses_color(0xffffff))
         curses.init_color(COLOR_BLACK_STONE, *self._curses_color(0x000000))
 
@@ -319,12 +321,20 @@ class HalmaTui:
         curses.init_pair(2, COLOR_BLACK_STONE, COLOR_WHITE_FIELD)
         curses.init_pair(3, COLOR_WHITE_STONE, COLOR_BLACK_FIELD)
         curses.init_pair(4, COLOR_BLACK_STONE, COLOR_BLACK_FIELD)
+        curses.init_pair(5, COLOR_WHITE_STONE, COLOR_WHITE_CAMP)
+        curses.init_pair(6, COLOR_BLACK_STONE, COLOR_WHITE_CAMP)
+        curses.init_pair(7, COLOR_WHITE_STONE, COLOR_BLACK_CAMP)
+        curses.init_pair(8, COLOR_BLACK_STONE, COLOR_BLACK_CAMP)
 
         self._gameboard_attrs = {
-                'WW': curses.color_pair(1),
-                'BW': curses.color_pair(2),
-                'WB': curses.color_pair(3),
-                'BB': curses.color_pair(4),
+                'WHITEWHITE': curses.color_pair(1),
+                'BLACKWHITE': curses.color_pair(2),
+                'WHITEBLACK': curses.color_pair(3),
+                'BLACKBLACK': curses.color_pair(4),
+                'WHITECYAN': curses.color_pair(5),
+                'BLACKCYAN': curses.color_pair(6),
+                'WHITENAVY': curses.color_pair(7),
+                'BLACKNAVY': curses.color_pair(8),
         }
 
         # Kolory nagłówka.
