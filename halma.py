@@ -6,6 +6,7 @@
 
 from enum import Enum
 from random import randint
+import json
 
 
 class ModeError(Exception):
@@ -46,6 +47,7 @@ class Game:
         self._board = [[state.EMPTY]*16 for i in range(16)]
 
         self.supported_modes = ['classic', 'random']
+
         self.mode = None
         self.move = 1  # Obecny ruch.
 
@@ -277,10 +279,81 @@ class Game:
 
         return value
 
-    def save(filename):
-        """! Saves game to file. """
-        pass
+    def _state_str(self, value):
+        """! Converts state to string. """
 
-    def load(filename):
-        """! Loads game from file. """
-        pass
+        if (value == state.EMPTY):
+            return 'EMPTY'
+        if (value == state.WHITE):
+            return 'WHITE'
+        if (value == state.BLACK):
+            return 'BLACK'
+
+        raise ValueError('Unknown state.')
+
+    def _state(self, string):
+        """! Converts string to state enum. """
+
+        if (string == 'EMPTY'):
+            return state.EMPTY
+        if (string == 'WHITE'):
+            return state.WHITE
+        if (string == 'BLACK'):
+            return state.BLACK
+
+        raise ValueError('Unknown state.')
+
+    def save(self, filename):
+        """! Zapisuje grę do pliku.
+
+        @filename Nazwa pliku.
+
+        @return Czy zapis się udał.
+        """
+
+        str_board = [[[self._state_str(self._board[i][j])]
+                      for j in range(16)]
+                     for i in range(16)]
+
+        to_save = {
+                'mode': self.mode,
+                'move': self.move,
+                'board': str_board,
+        }
+
+        try:
+            with open(filename, 'w') as fp:
+                json.dump(to_save, fp)
+        except EnvironmentError:
+            # Zapis się nie udał bo
+            # np. nie mamy uprawnień do pliku.
+            return False
+
+        return True
+
+    def load(self, filename):
+        """! Wczytuje grę z pliku.
+
+        @filename Nazwa pliku.
+        """
+
+        game_data = None
+
+        # Nie zajmuję się tu obsługą błędów.
+        # Wyjątek ma zostać obsłużony wyżej.
+        with open(filename, 'r') as fp:
+            game_data = json.load(fp)
+
+        self.mode = game_data.get('mode', None)
+        if (self.mode is None):
+            raise ValueError('Corrupted file.')
+
+        self.move = game_data.get('move', None)
+        if (self.mode is None):
+            raise ValueError('Corrupted file.')
+
+        str_board = game_data.get('board', None)
+
+        self._board = [[[self._state(str_board[i][j])]
+                        for j in range(16)]
+                       for i in range(16)]
