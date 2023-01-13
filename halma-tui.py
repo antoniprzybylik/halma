@@ -361,7 +361,7 @@ class HalmaTui:
     def _setup(self):
         """! Funkcja ustawiająca grę. """
         # FIXME: Trzeba dać do wyboru.
-        self._game.setup('classic')
+        self._game.setup('random')
 
         # Sprawdzam, czy w danym terminalu
         # można uruchomić grę.

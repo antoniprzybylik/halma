@@ -1,4 +1,5 @@
 from enum import Enum
+from random import randint
 
 
 class ModeError(Exception):
@@ -29,14 +30,15 @@ class Game:
         get_board()
         set_field()
         read_field()
+        save()
+        load()
     """
-    # TODO: Save.
 
     def __init__(self):
         """! Konstruktor klasy game. """
         self._board = [[state.EMPTY]*16 for i in range(16)]
 
-        self.supported_modes = ['classic']
+        self.supported_modes = ['classic', 'random']
         self.mode = None
         self.move = 1  # Obecny ruch.
 
@@ -58,6 +60,9 @@ class Game:
         if (mode == 'classic'):
             self._classic_mode_setup()
             return
+        if (mode == 'random'):
+            self._random_mode_setup()
+            return
 
     def _classic_mode_setup(self):
         """! Funkcja pomocnicza metody setup.
@@ -74,6 +79,38 @@ class Game:
         for i in range(0, 5):
             for j in range(0, [5, 5, 4, 3, 2][i]):
                 self._board[15 - i][15 - j] = state.WHITE
+
+    def _random_mode_setup(self):
+        """! Funkcja pomocnicza metody setup.
+
+        Ustawia grę losowo.
+        """
+
+        # Ustawiamy czarne pionki.
+        for k in range(0, 19):
+            # Losujemy pozycję dopóki
+            # nie trafimy na puste pole.
+            while True:
+                i = randint(0, 15)
+                j = randint(0, 15)
+
+                if (self._board[i][j] == state.EMPTY):
+                    break
+
+            self._board[i][j] = state.BLACK
+
+        # Ustawiamy białe pionki.
+        for k in range(0, 19):
+            # Losujemy pozycję dopóki
+            # nie trafimy na puste pole.
+            while True:
+                i = randint(0, 15)
+                j = randint(0, 15)
+
+                if (self._board[i][j] == state.EMPTY):
+                    break
+
+            self._board[i][j] = state.WHITE
 
     def moves(self, x, y):
         """! Znajduje wszystkie pola na które można wykonać ruch.
@@ -208,3 +245,11 @@ class Game:
             raise ValueError('Corrupted data.')
 
         return value
+
+    def save(filename):
+        """! Saves game to file. """
+        pass
+
+    def load(filename):
+        """! Loads game from file. """
+        pass
