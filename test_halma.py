@@ -1,4 +1,7 @@
-# Testy jednostkowe dla metod klasy game.
+# Testy jednostkowe dla metod klasy Game,
+# która jest w pliku halma.py.
+#
+# Autor: Antoni Przybylik
 
 import halma
 from halma import state

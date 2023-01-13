@@ -1,5 +1,10 @@
 #!/usr/bin/python3
 
+# Tekstowy interfejs użytkownika (TUI)
+# do gry Halma.
+#
+# Autor: Antoni Przybylik
+
 import halma
 from halma import state
 

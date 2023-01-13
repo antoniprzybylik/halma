@@ -1,3 +1,9 @@
+# Silnik gry Halma. Zawiera klasę
+# Game odpowiedzialną za operacje
+# na planszy i zarządzanie grą.
+#
+# Autor: Antoni Przybylik
+
 from enum import Enum
 from random import randint
 

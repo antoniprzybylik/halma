@@ -1,5 +1,14 @@
 #!/usr/bin/python3
 
+# Powłoka pozwalająca na ręczne wywoływanie
+# metod klasy Game, która jest w pliku halma.py.
+#
+# Nie jest on istotną częścią projektu, dołączam
+# go dlatego, że może on być tylko być na plus,
+# a nie stracę za niego punktów za projekt.
+#
+# Autor: Antoni Przybylik
+
 import readline
 import sys
 import cmd2
