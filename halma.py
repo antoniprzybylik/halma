@@ -311,7 +311,7 @@ class Game:
         @return Czy zapis się udał.
         """
 
-        str_board = [[[self._state_str(self._board[i][j])]
+        str_board = [[self._state_str(self._board[i][j])
                       for j in range(16)]
                      for i in range(16)]
 
@@ -354,6 +354,6 @@ class Game:
 
         str_board = game_data.get('board', None)
 
-        self._board = [[[self._state(str_board[i][j])]
+        self._board = [[self._state(str_board[i][j])
                         for j in range(16)]
                        for i in range(16)]

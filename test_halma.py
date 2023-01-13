@@ -93,3 +93,22 @@ def test_set_read2():
 
     game.set_field(0, 0, state.WHITE)
     assert game.read_field(0, 0) == state.WHITE
+
+
+# Metody save, load
+#
+# Za ich pomocą można zapisywać
+# i wczytywać grę z pliku.
+
+
+def test_save_load1():
+    game = halma.Game()
+    game.setup('random')
+    game.save('/tmp/random_game.json')
+
+    game2 = halma.Game()
+    game2.load('/tmp/random_game.json')
+
+    assert game.mode == game2.mode
+    assert game.move == game2.move
+    assert str(game._board) == str(game2._board)
