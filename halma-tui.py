@@ -46,7 +46,7 @@ class HalmaTui:
             raise TerminalNotSupportedError()
 
         y, x = self._stdscr.getmaxyx()
-        if (x < 70 or y < 35):
+        if (x < 70 or y < 40):
             raise WindowTooSmallError()
 
     def _curses_color(self, packed):
