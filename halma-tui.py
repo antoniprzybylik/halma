@@ -32,6 +32,7 @@ class HalmaTui:
 
     def __init__(self):
         self._stdscr = None
+        self._game = halma.Game()
 
     def _check_scr(self):
         """! Sprawdza, czy można uruchomić grę w trybie TUI.
@@ -70,10 +71,9 @@ class HalmaTui:
 
         return (r, g, b)
 
-    def _print_header(self, attr, move, player):
+    def _print_header(self, move, player):
         """! Rysuje nagłówek.
 
-        @param attr Własności czcionki.
         @param move Numer ruchu.
         @param player Gracz którego jest ruch.
         """
@@ -86,9 +86,15 @@ class HalmaTui:
                          len(left_aligned_str) -
                          len(right_aligned_str))
 
-        self._stdscr.addstr(left_aligned_str, attr)
-        self._stdscr.addstr(gap_str, attr)
-        self._stdscr.addstr(right_aligned_str, attr)
+        self._stdscr.addstr(left_aligned_str, self._header_attr)
+        self._stdscr.addstr(gap_str, self._header_attr)
+        self._stdscr.addstr(right_aligned_str, self._header_attr)
+
+    def _print_help(self):
+        """! Rysuje pasek z pomocą. """
+        help_msg = 'q - quit  m - move'
+
+        self._stdscr.addstr('  ' + help_msg)
         self._stdscr.addstr('\n')
 
     def _field_label(self, num):
@@ -121,7 +127,7 @@ class HalmaTui:
 
         self._stdscr.addstr('\n')
 
-    def _dialog(self, text, size_y, size_x, attributes):
+    def _dialog(self, text, size_y, size_x):
         """! Wyświetla okno dialogowe na środku ekranu.
 
         @param text Tekst w oknie.
@@ -144,7 +150,7 @@ class HalmaTui:
         pos_y = (screen_y - size_y) // 2
 
         dialog_box = curses.newwin(size_y, size_x, pos_y, pos_x)
-        dialog_box.bkgd(' ', attributes['DIALOG'])
+        dialog_box.bkgd(' ', self._dialogbox_attrs['DIALOG'])
         dialog_box.addstr(1, 1, text)
 
         # Pozycja pola wejściowego w dialog box'ie.
@@ -158,7 +164,7 @@ class HalmaTui:
         input_field_window = input_window.subwin(1, size_x - 4,
                                                  pos_y + input_window_pos + 1,
                                                  pos_x + 2)
-        input_field_window.bkgd(' ', attributes['INPUT'])
+        input_field_window.bkgd(' ', self._dialogbox_attrs['INPUT'])
         input_field = Textbox(input_field_window)
 
         dialog_box.refresh()
@@ -169,92 +175,29 @@ class HalmaTui:
 
         return input_field.gather()
 
-    def _mainloop(self):
-        """! Główna funkcja gry.
-
-        Główna funkcja gry.
-        W przyszłości dam rysowanie
-        do osobnej funkcji, a tutaj
-        ogólne rzeczy.
-        """
-
-        game = halma.Game()
-        game.setup('classic')
-
-        board = game.get_board()
-
-        # Sprawdzam, czy w danym terminalu
-        # można uruchomić grę.
-        self._check_scr()
-
-        curses.start_color()
-        curses.use_default_colors()
-
-        # Zapisujemy kolory.
-        saved_colors = [curses.color_content(i)
-                        for i in range(curses.COLORS)]
-
-        # Kolory planszy.
-        # Zaczynają się od 230.
-        COLOR_BLACK_FIELD = 230
-        COLOR_WHITE_FIELD = 231
-        COLOR_WHITE_STONE = 232
-        COLOR_BLACK_STONE = 233
-
-        curses.init_color(COLOR_BLACK_FIELD, *self._curses_color(0x444444))
-        curses.init_color(COLOR_WHITE_FIELD, *self._curses_color(0xa8a8a8))
-        curses.init_color(COLOR_WHITE_STONE, *self._curses_color(0xffffff))
-        curses.init_color(COLOR_BLACK_STONE, *self._curses_color(0x000000))
-
-        # Pary kolorów planszy.
-        curses.init_pair(1, COLOR_WHITE_STONE, COLOR_WHITE_FIELD)
-        curses.init_pair(2, COLOR_BLACK_STONE, COLOR_WHITE_FIELD)
-        curses.init_pair(3, COLOR_WHITE_STONE, COLOR_BLACK_FIELD)
-        curses.init_pair(4, COLOR_BLACK_STONE, COLOR_BLACK_FIELD)
-
-        # Kolory nagłówka.
-        # Zaczynają się od 240
-        COLOR_HEADER_BG = 240
-        COLOR_HEADER_FG = 241
-        curses.init_color(COLOR_HEADER_BG, *self._curses_color(0xeeeeee))
-        curses.init_color(COLOR_HEADER_FG, *self._curses_color(0x502040))
-
-        # Para kolorów nagłówka.
-        curses.init_pair(11, COLOR_HEADER_FG, COLOR_HEADER_BG)
-        header_attr = curses.color_pair(11)
-
-        # Kolory dialog boxa.
-        # Zaczynają się od 250
-        COLOR_DIALOG_BG = 250
-        COLOR_DIALOG_FG = 251
-        COLOR_INPUT_BG = 252
-        COLOR_INPUT_FG = 253
-        curses.init_color(COLOR_DIALOG_BG, *self._curses_color(0x666666))
-        curses.init_color(COLOR_DIALOG_FG, *self._curses_color(0x000000))
-        curses.init_color(COLOR_INPUT_BG, *self._curses_color(0x0000a0))
-        curses.init_color(COLOR_INPUT_FG, *self._curses_color(0xeeee00))
-
-        # Pary kolorów dialog boxa.
-        curses.init_pair(21, COLOR_DIALOG_FG, COLOR_DIALOG_BG)
-        curses.init_pair(22, COLOR_INPUT_FG, COLOR_INPUT_BG)
-
-        dialogbox_attributes = {
-                'DIALOG': curses.color_pair(21),
-                'INPUT': curses.color_pair(22),
-        }
-
-        curses.curs_set(0)
-        self._stdscr.clear()
+    def _draw_main_window(self):
+        """! Draws main UI window. """
+        board = self._game.get_board()
 
         # Na górze rysujemy nagłówek.
-        self._print_header(header_attr, 1, 'white')
+        self._print_header(1, 'white')
+
+        # Pod nagłówkiem rysujemy pasek pomocy.
+        self._print_help()
 
         screen_y, screen_x = self._stdscr.getmaxyx()
 
         # Pusta przestrzeń po lewej stronie szachownicy i
         # na górze szachownicy.
+        #
+        # Przestrzeń z lewej: szerokość ekranu - 2*szerokość
+        #                     podpisu pod polem
+        #
+        # Przestrzeń z prawej: wysokość ekranu - 2*szerokość
+        #                      podpisu pod polem - szerokość
+        #                      nagłówka i paska pomocy
         left_gap_str = ' ' * ((screen_x - 4*16 - 4) // 2)
-        upper_gap_str = '\n' * ((screen_y - 2*16 - 2 - 1 - 2) // 2)
+        upper_gap_str = '\n' * ((screen_y - 2*16 - 4 - 2) // 2)
 
         self._stdscr.addstr(upper_gap_str)
 
@@ -285,24 +228,39 @@ class HalmaTui:
             for rj in range(0, 16*4):
                 j = rj // 4
 
-                # Tło: 0 - białe, 2 - czarne.
-                color_pair = 0 if ((i+j) % 2) else 2
                 field_char = ' '
+                attr = None
 
-                if (board[i][j] == state.WHITE):
-                    color_pair += 1  # Biała czcionka.
+                if (board[i][j] == state.WHITE and
+                        (i+j) % 2 == 0):
+                    attr = self._gameboard_attrs['WW']
                     field_char = 'w'
 
-                if (board[i][j] == state.BLACK):
-                    color_pair += 2  # Czarna czcionka.
+                if (board[i][j] == state.WHITE and
+                        (i+j) % 2 == 1):
+                    attr = self._gameboard_attrs['WB']
+                    field_char = 'w'
+
+                if (board[i][j] == state.BLACK and
+                        (i+j) % 2 == 0):
+                    attr = self._gameboard_attrs['BW']
                     field_char = 'm'
 
-                if (board[i][j] == state.EMPTY):
-                    color_pair += 1
-                    # Czcionka, której używamy na
-                    # pustym polu nie ma znaczenia
+                if (board[i][j] == state.BLACK and
+                        (i+j) % 2 == 1):
+                    attr = self._gameboard_attrs['BB']
+                    field_char = 'm'
 
-                attr = curses.color_pair(color_pair)
+                if (board[i][j] == state.EMPTY and
+                        (i+j) % 2 == 0):
+                    attr = self._gameboard_attrs['WW']
+
+                if (board[i][j] == state.EMPTY and
+                        (i+j) % 2 == 1):
+                    attr = self._gameboard_attrs['BB']
+
+                if (attr is None):
+                    raise ValueError('Unknown field state.')
 
                 if (rj % 4 == 1 and not ri % 2):
                     to_print = field_char
@@ -320,19 +278,120 @@ class HalmaTui:
         # Pod szachownicą rysujemy wiersz z podpisami pól.
         self._print_label_row(left_gap_str)
 
-        self._stdscr.refresh()
+    def _mainloop(self):
+        """! Główna pętla gry. """
 
-        msg = self._dialog('Enter your move:', 7, 30,
-                           dialogbox_attributes)
+        while True:
+            self._stdscr.clear()
+            self._draw_main_window()
+            self._stdscr.refresh()
 
+            key = self._stdscr.getkey()
+
+            if (key == 'q'):
+                msg = self._dialog('Do you really want to quit? '
+                                   'Type \"YES\" to confirm.', 7, 54)
+                msg = msg.rstrip()
+
+                if (msg == 'YES'):
+                    break
+
+            if (key == 'm'):
+                msg = self._dialog('Enter your move:', 7, 30)
+
+    def _setup_colors(self):
+        """! Inicjalizuje kolory, które będą używane w UI. """
+
+        # Kolory planszy.
+        # Zaczynają się od 230.
+        COLOR_BLACK_FIELD = 230
+        COLOR_WHITE_FIELD = 231
+        COLOR_WHITE_STONE = 232
+        COLOR_BLACK_STONE = 233
+
+        curses.init_color(COLOR_BLACK_FIELD, *self._curses_color(0x444444))
+        curses.init_color(COLOR_WHITE_FIELD, *self._curses_color(0xa8a8a8))
+        curses.init_color(COLOR_WHITE_STONE, *self._curses_color(0xffffff))
+        curses.init_color(COLOR_BLACK_STONE, *self._curses_color(0x000000))
+
+        # Pary kolorów planszy.
+        curses.init_pair(1, COLOR_WHITE_STONE, COLOR_WHITE_FIELD)
+        curses.init_pair(2, COLOR_BLACK_STONE, COLOR_WHITE_FIELD)
+        curses.init_pair(3, COLOR_WHITE_STONE, COLOR_BLACK_FIELD)
+        curses.init_pair(4, COLOR_BLACK_STONE, COLOR_BLACK_FIELD)
+
+        self._gameboard_attrs = {
+                'WW': curses.color_pair(1),
+                'BW': curses.color_pair(2),
+                'WB': curses.color_pair(3),
+                'BB': curses.color_pair(4),
+        }
+
+        # Kolory nagłówka.
+        # Zaczynają się od 240
+        COLOR_HEADER_BG = 240
+        COLOR_HEADER_FG = 241
+        curses.init_color(COLOR_HEADER_BG, *self._curses_color(0xeeeeee))
+        curses.init_color(COLOR_HEADER_FG, *self._curses_color(0x502040))
+
+        # Para kolorów nagłówka.
+        curses.init_pair(11, COLOR_HEADER_FG, COLOR_HEADER_BG)
+        self._header_attr = curses.color_pair(11)
+
+        # Kolory dialog boxa.
+        # Zaczynają się od 250
+        COLOR_DIALOG_BG = 250
+        COLOR_DIALOG_FG = 251
+        COLOR_INPUT_BG = 252
+        COLOR_INPUT_FG = 253
+        curses.init_color(COLOR_DIALOG_BG, *self._curses_color(0x666666))
+        curses.init_color(COLOR_DIALOG_FG, *self._curses_color(0x000000))
+        curses.init_color(COLOR_INPUT_BG, *self._curses_color(0x0000a0))
+        curses.init_color(COLOR_INPUT_FG, *self._curses_color(0xeeee00))
+
+        # Pary kolorów dialog boxa.
+        curses.init_pair(21, COLOR_DIALOG_FG, COLOR_DIALOG_BG)
+        curses.init_pair(22, COLOR_INPUT_FG, COLOR_INPUT_BG)
+
+        self._dialogbox_attrs = {
+                'DIALOG': curses.color_pair(21),
+                'INPUT': curses.color_pair(22),
+        }
+
+    def _setup(self):
+        """! Funkcja ustawiająca grę. """
+        # FIXME: Trzeba dać do wyboru.
+        self._game.setup('classic')
+
+        # Sprawdzam, czy w danym terminalu
+        # można uruchomić grę.
+        self._check_scr()
+
+        curses.start_color()
+        curses.use_default_colors()
+
+        # Zapisujemy kolory.
+        self._saved_colors = [curses.color_content(i)
+                              for i in range(curses.COLORS)]
+
+        self._setup_colors()
+
+        # Wyłącz pokazywanie kursora.
+        curses.curs_set(0)
+
+    def _exit(self):
+        """! Funkcja na wyjście z gry. """
         # Przywracamy zapisane kolory.
         for i in range(curses.COLORS):
-            curses.init_color(i, *saved_colors[i])
+            curses.init_color(i, *self._saved_colors[i])
 
     def _exec(self, stdscr):
         """! Funkcja pomocnicza dla exec. """
         self._stdscr = stdscr
+
+        self._setup()
         self._mainloop()
+        self._exit()
 
     def exec(self):
         """! Wyświetla TUI. """
