@@ -15,7 +15,7 @@ class state(Enum):
     BLACK = 3
 
 
-class game:
+class Game:
     """! Reprezentuje grę Halma.
 
     Parametry publiczne:
