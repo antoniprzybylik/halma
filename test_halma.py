@@ -3,6 +3,8 @@
 #
 # Autor: Antoni Przybylik
 
+from pytest import raises
+
 import halma
 from halma import state
 
@@ -112,3 +114,12 @@ def test_save_load1():
     assert game.mode == game2.mode
     assert game.move == game2.move
     assert str(game._board) == str(game2._board)
+
+
+def test_save_load2():
+    with open('/tmp/broken_file.json', 'w') as fp:
+        fp.write('{"mode": "classic", "move": "aalmakota"}')
+
+    with raises(ValueError):
+        game = halma.Game()
+        game.load('/tmp/broken_file.json')

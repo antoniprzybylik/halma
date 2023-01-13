@@ -349,10 +349,12 @@ class Game:
             raise ValueError('Corrupted file.')
 
         self.move = game_data.get('move', None)
-        if (self.mode is None):
+        if (self.move is None):
             raise ValueError('Corrupted file.')
 
         str_board = game_data.get('board', None)
+        if (str_board is None):
+            raise ValueError('Corrupted file.')
 
         self._board = [[self._state(str_board[i][j])
                         for j in range(16)]
