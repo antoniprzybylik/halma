@@ -33,6 +33,11 @@ class WindowTooSmallError(Exception):
         super().__init__('Window is too small.')
 
 
+class EscapeInterrupt(Exception):
+    """! Przerwanie w celu schowania dialog box'a. """
+    pass
+
+
 class HalmaTui:
     """! Reprezentuje interfejs graficzny. """
 
@@ -176,11 +181,21 @@ class HalmaTui:
 
         dialog_box.refresh()
 
+        def quit_if_esc(char):
+            if (char == curses.ascii.ESC):
+                raise EscapeInterrupt()
+
+            return char
+
         curses.curs_set(1)
-        input_field.edit()
+        try:
+            input_field.edit(validate=quit_if_esc)
+            input_str = input_field.gather()
+        except EscapeInterrupt:
+            input_str = None
         curses.curs_set(0)
 
-        return input_field.gather()
+        return input_str
 
     def _draw_main_window(self):
         """! Draws main UI window. """
@@ -296,20 +311,25 @@ class HalmaTui:
             if (key == 'q'):
                 msg = self._dialog('Do you really want to quit? '
                                    'Type \"YES\" to confirm.', 7, 54)
-                msg = msg.rstrip()
 
-                if (msg == 'YES'):
-                    break
+                if (msg is not None):
+                    msg = msg.rstrip()
+
+                    if (msg == 'YES'):
+                        break
 
             if (key == 'm'):
                 move_str = self._dialog('Enter your move:', 7, 30)
-                move_str = move_str.rstrip()
 
-                # Dopóki nie udaje się wykonać ruchu wprowadzonego
-                # przez użytkownika: Wczytujemy ruch jeszcze raz.
-                while (not self._game_iface.move(move_str)):
-                    move_str = self._dialog('Invalid! Enter your move:', 7, 30)
+                if (move_str is not None):
                     move_str = move_str.rstrip()
+
+                    # Dopóki nie udaje się wykonać ruchu wprowadzonego
+                    # przez użytkownika: Wczytujemy ruch jeszcze raz.
+                    while (not self._game_iface.move(move_str)):
+                        move_str = self._dialog('Invalid! Enter your move:',
+                                                7, 30)
+                        move_str = move_str.rstrip()
 
     def _setup_colors(self):
         """! Inicjalizuje kolory, które będą używane w UI. """
