@@ -7,6 +7,7 @@
 
 import halma
 from halma import state
+from halma import player
 import iface
 
 # Używam biblioteki curses
@@ -90,7 +91,7 @@ class HalmaTui:
         @param player Gracz którego jest ruch.
         """
 
-        if (plr == plr.WHITE):
+        if (plr == player.WHITE):
             plr_str = 'white'
         else:
             plr_str = 'black'
@@ -109,7 +110,7 @@ class HalmaTui:
 
     def _print_help(self):
         """! Rysuje pasek z pomocą. """
-        help_msg = 'q - quit  m - move'
+        help_msg = 'q - quit  m - move  s - save  l - load'
 
         self._stdscr.addstr('  ' + help_msg)
         self._stdscr.addstr('\n')
@@ -333,9 +334,27 @@ class HalmaTui:
                     # Dopóki nie udaje się wykonać ruchu wprowadzonego
                     # przez użytkownika: Wczytujemy ruch jeszcze raz.
                     while (not self._game_iface.move(move_str)):
-                        move_str = self._dialog('Invalid! Enter your move:',
-                                                7, 30)
+                        move_str = self._dialog('Invalid!\n Enter your move:',
+                                                8, 30)
                         move_str = move_str.rstrip()
+
+            if (key == 's'):
+                filename = self._dialog('Enter filename:', 7, 30)
+
+                if (filename is not None):
+                    filename = filename.rstrip()
+
+                    # TODO: Wykrywanie błędów.
+                    self._game_iface.save_game(filename)
+
+            if (key == 'l'):
+                filename = self._dialog('Enter filename:', 7, 30)
+
+                if (filename is not None):
+                    filename = filename.rstrip()
+
+                    # TODO: Wykrywanie błędów.
+                    self._game_iface.load_game(filename)
 
     def _setup_colors(self):
         """! Inicjalizuje kolory, które będą używane w UI. """

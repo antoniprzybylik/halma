@@ -290,11 +290,9 @@ class Game:
     def _player_to_str(self, value):
         """! Zamienia obiekt typu wyliczeniowego player na napis. """
 
-        if (value == state.EMPTY):
-            return 'EMPTY'
-        if (value == state.WHITE):
+        if (value == player.WHITE):
             return 'WHITE'
-        if (value == state.BLACK):
+        if (value == player.BLACK):
             return 'BLACK'
 
         raise ValueError('Unknown state.')
@@ -302,12 +300,10 @@ class Game:
     def _str_to_player(self, string):
         """! Zamienia napis na obiekt typu wyliczeniowego player. """
 
-        if (string == 'EMPTY'):
-            return state.EMPTY
         if (string == 'WHITE'):
-            return state.WHITE
+            return player.WHITE
         if (string == 'BLACK'):
-            return state.BLACK
+            return player.BLACK
 
         raise ValueError('Unknown state.')
 

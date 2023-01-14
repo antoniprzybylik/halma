@@ -11,6 +11,7 @@
 #
 # Autor: Antoni Przybylik
 
+import halma
 from halma import state
 from halma import player
 
@@ -228,3 +229,17 @@ class GameInterface:
 
         # TODO: Wszystko.
         pass
+
+    def save_game(self, filename):
+        """! Zapisuje grę do pliku. """
+
+        self._game.save(filename)
+
+    def load_game(self, filename):
+        """! Wczytuje grę z pliku. """
+
+        game = halma.Game()
+        game.load(filename)
+
+        del self._game
+        self.__init__(game)
