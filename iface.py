@@ -165,9 +165,14 @@ class GameInterface:
         self._game.set_field(*field2, on_field1)
 
         if (self._game.moving_player == player.WHITE):
+            # Jeżeli teraz ruszał się biały, to
+            # teraz jest kolej na czarnego.
             self._game.moving_player = player.BLACK
         else:
+            # Jeżeli w danym ruchu ruszył się czarny,
+            # przechodzimy do następnego ruchu.
             self._game.moving_player = player.WHITE
+            self._game.move += 1
 
     def move(self, move_str):
         """! Funkcja wykonująca ruch.
