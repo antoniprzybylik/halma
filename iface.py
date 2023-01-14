@@ -143,6 +143,11 @@ class GameInterface:
         self._game.set_field(*field1, state.EMPTY)
         self._game.set_field(*field2, on_field1)
 
+        if (self._game.moving_player == 1):
+            self._game.moving_player = 2
+        else:
+            self._game.moving_player = 1
+
     def move(self, move_str):
         """! Funkcja wykonująca ruch.
 
@@ -162,14 +167,14 @@ class GameInterface:
         self._apply_move(field1, field2)
         return True
 
-    def in_camp(self, x, y):
+    def in_camp(self, y, x):
         """! Sprawdza w jakim obozie znajduje się pole.
 
         Zwraca 'w' jeśli w białym, 'b' jeśli w czarnym,
         'n' jeśli w żadnym.
 
-        @param x Współrzędna X pola.
         @param y Współrzędna Y pola.
+        @param x Współrzędna X pola.
 
         @return W jakim obozie znajduje się pole.
         """

@@ -181,7 +181,7 @@ class HaSh(cmd2.Cmd):
 
         \033[31;1mUsage schemes:\033[0m
 
-        moves <x> <y>
+        moves <y> <x>
         """
 
         if (arg_str is None or arg_str == ''):
@@ -204,10 +204,10 @@ class HaSh(cmd2.Cmd):
             print('Error: No game selected.')
             return
 
-        x = int(argv[0])
-        y = int(argv[1])
+        y = int(argv[0])
+        x = int(argv[1])
 
-        print(game.moves(x, y))
+        print(game.moves(y, x))
 
     def do_list(self, arg_str):
         """
@@ -296,7 +296,7 @@ class HaSh(cmd2.Cmd):
 
         \033[31;1mUsage schemes:\033[0m
 
-        set <x> <y> <state>
+        set <y> <x> <state>
         """
 
         if (arg_str is None or arg_str == ''):
@@ -319,15 +319,15 @@ class HaSh(cmd2.Cmd):
             print('Error: No game selected.')
             return
 
-        x = int(argv[0])
-        y = int(argv[1])
+        y = int(argv[0])
+        x = int(argv[1])
 
         if (argv[2] == 'EMPTY'):
-            game.set_field(x, y, state.EMPTY)
+            game.set_field(y, x, state.EMPTY)
         elif (argv[2] == 'WHITE'):
-            game.set_field(x, y, state.WHITE)
+            game.set_field(y, x, state.WHITE)
         elif (argv[2] == 'BLACK'):
-            game.set_field(x, y, state.BLACK)
+            game.set_field(y, x, state.BLACK)
         else:
             raise ValueError('Not a valid value for field.')
 
@@ -339,7 +339,7 @@ class HaSh(cmd2.Cmd):
 
         \033[31;1mUsage schemes:\033[0m
 
-        read <x> <y>
+        read <y> <x>
         """
 
         if (arg_str is None or arg_str == ''):
@@ -362,10 +362,10 @@ class HaSh(cmd2.Cmd):
             print('Error: No game selected.')
             return
 
-        x = int(argv[0])
-        y = int(argv[1])
+        y = int(argv[0])
+        x = int(argv[1])
 
-        value = game.read_field(x, y)
+        value = game.read_field(y, x)
         if (value == state.EMPTY):
             print('EMPTY')
         elif (value == state.WHITE):

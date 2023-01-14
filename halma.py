@@ -123,93 +123,93 @@ class Game:
 
             self._board[i][j] = state.WHITE
 
-    def moves(self, x, y):
+    def moves(self, y, x):
         """! Znajduje wszystkie pola na które można wykonać ruch.
 
-        @param x Współrzędna X pola.
         @param y Współrzędna Y pola.
+        @param x Współrzędna X pola.
 
         @return Lista pól na które można wykonać ruch z danego pola.
         """
-        if (type(x) != int):
+        if (type(y) != int):
             raise TypeError('Invalid coordinates')
         if (type(x) != int):
             raise TypeError('Invalid coordinates')
 
-        return self._moves(x, y)
+        return self._moves(y, x)
 
-    def _pos_on_board(self, x, y):
+    def _pos_on_board(self, y, x):
         """! Sprawdza, czy pole jest na planszy.
 
-        @param x Współrzędna X pola.
         @param y Współrzędna Y pola.
+        @param x Współrzędna X pola.
 
         @return Czy pole jest na planszy.
         """
-        if (x < 0 or y < 0):
+        if (y < 0 or x < 0):
             return False
-        if (x > 15 or y > 15):
+        if (y > 15 or x > 15):
             return False
         return True
 
-    def _pos_permitted(self, x, y, forbidden):
+    def _pos_permitted(self, y, x, forbidden):
         """! Sprawdza, czy pole jest na liście pól zakazanych.
 
-        @param x Współrzędna X pola.
         @param y Współrzędna Y pola.
+        @param x Współrzędna X pola.
         @param forbidden Lista pól zakazanych.
 
         @return Czy pole jest na liście pól zakazanych.
         """
-        if ((x, y) in forbidden):
+        if ((y, x) in forbidden):
             return False
         return True
 
-    def _validate_pos(self, x, y, forbidden):
+    def _validate_pos(self, y, x, forbidden):
         """! Sprawdza, czy wolno się ruszyć na dane pole.
 
-        @param x Współrzędna X pola.
         @param y Współrzędna Y pola.
+        @param x Współrzędna X pola.
         @param visited Lista pól zakazanych.
 
         @return Czy wolno się ruszyć na dane pole.
         """
-        if (self._pos_on_board(x, y) and
-            self._pos_permitted(x, y, forbidden)):  # noqa: E129
+        if (self._pos_on_board(y, x) and
+            self._pos_permitted(y, x, forbidden)):  # noqa: E129
             return True
         return False
 
-    def _moves(self, x, y, visited=[]):
+    def _moves(self, y, x, visited=[]):
         """! Funkcja pomocnicza metody moves.
 
-        @param x Współrzędna X pola.
         @param y Współrzędna Y pola.
+        @param x Współrzędna X pola.
         @param visited Odwiedzone pola.
 
         @return Pola na które można się ruszyć.
         """
-        delta_x = [-1, 0, 1, 1,  1,  0, -1, -1]
-        delta_y = [ 1, 1, 1, 0, -1, -1, -1,  0]  # noqa: E201
+        delta_y = [-1, 0, 1, 1,  1,  0, -1, -1]
+        delta_x = [ 1, 1, 1, 0, -1, -1, -1,  0]  # noqa: E201
 
         possible = []
 
-        for dx, dy in zip(delta_x, delta_y):
-            if (self._validate_pos(x+dx, y+dy, visited) and
-                self._board[x+dx][y+dy] == state.EMPTY):    # noqa E129
+        for dy, dx in zip(delta_y, delta_x):
+            if (self._validate_pos(y+dy, x+dx, visited) and
+                self._board[y+dy][x+dx] == state.EMPTY):    # noqa E129
 
                 if (len(visited) == 0):
-                    possible.append((x+dx, y+dy))
+                    possible.append((y+dy, x+dx))
 
-            elif (self._validate_pos(x+2*dx, y+2*dy, visited) and
-                  self._board[x+2*dx][y+2*dy] == state.EMPTY):
+            elif (self._validate_pos(y+2*dy, x+2*dx, visited) and
+                  self._board[y+2*dy][x+2*dx] == state.EMPTY):
 
-                possible.append((x+2*dx, y+2*dy))
+                possible.append((y+2*dy, x+2*dx))
 
                 # Unikamy kopiowania tablicy.
                 # Dodajemy tylko do niej obecną
                 # pozycję, a następnie ją usuwamy.
-                visited.append((x, y))
-                possible += self._moves(x+2*dx, y+2*dy, visited)
+                visited.append((y, x))
+                possible += self._moves(y+2*dy, x+2*dx, visited)
                 visited.pop()
 
         return possible
@@ -222,35 +222,35 @@ class Game:
 
         return self._board
 
-    def set_field(self, x, y, value):
+    def set_field(self, y, x, value):
         """! Ustawia pole w danym stanie.
 
-        @param x Współrzędna X pola.
         @param y Współrzędna Y pola.
+        @param x Współrzędna X pola.
         @param value Stan pola.
         """
 
-        if (not self._pos_on_board(x, y)):
+        if (not self._pos_on_board(y, x)):
             raise ValueError('No such a field.')
 
         if (value not in state):
             raise ValueError('Not a valid value for field.')
 
-        self._board[x][y] = value
+        self._board[y][x] = value
 
-    def read_field(self, x, y):
+    def read_field(self, y, x):
         """! Zwraca stan danego pola.
 
-        @param x Współrzędna X pola.
         @param y Współrzędna Y pola.
+        @param x Współrzędna X pola.
 
         @return Stan pola.
         """
 
-        if (not self._pos_on_board(x, y)):
+        if (not self._pos_on_board(y, x)):
             raise ValueError('No such a field.')
 
-        value = self._board[x][y]
+        value = self._board[y][x]
 
         if (value not in state):
             raise ValueError('Corrupted data.')
