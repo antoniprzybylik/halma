@@ -83,17 +83,22 @@ class HalmaTui:
 
         return (r, g, b)
 
-    def _print_header(self, move, player):
+    def _print_header(self, move, plr):
         """! Rysuje nagłówek.
 
         @param move Numer ruchu.
         @param player Gracz którego jest ruch.
         """
 
+        if (plr == plr.WHITE):
+            plr_str = 'white'
+        else:
+            plr_str = 'black'
+
         y, x = self._stdscr.getmaxyx()
 
         left_aligned_str = ' HALMA 1.0'
-        right_aligned_str = f'move: {move} player: {player} '
+        right_aligned_str = f'move: {move} player: {plr_str} '
         gap_str = ' ' * (x -
                          len(left_aligned_str) -
                          len(right_aligned_str))
@@ -202,7 +207,8 @@ class HalmaTui:
         board = self._game_iface.get_board()
 
         # Na górze rysujemy nagłówek.
-        self._print_header(1, 'white')
+        self._print_header(self._game_iface.current_move(),
+                           self._game_iface.moving_player())
 
         # Pod nagłówkiem rysujemy pasek pomocy.
         self._print_help()

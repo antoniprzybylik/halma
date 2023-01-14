@@ -12,22 +12,43 @@
 # Autor: Antoni Przybylik
 
 from halma import state
+from halma import player
 
 
 class GameInterface:
     """! Reprezentuje interfejs gry. """
 
     def __init__(self, game):
-        """! Konstruktor klasy GameInterface. """
+        """! Konstruktor klasy GameInterface.
+
+        @param game Obiekt klasy Game.
+        """
         self._game = game
 
     def get_board(self):
-        """! Zwraca planszę do gry. """
+        """! Zwraca planszę do gry.
+
+        @return Plansza do gry.
+        """
         return self._game.get_board()
 
     def setup(self, mode):
         """! Ustawia grę w żądanym stanie. """
         self._game.setup(mode)
+
+    def current_move(self):
+        """! Zwraca numer obecnego ruchu.
+
+        @return Numer ruchu.
+        """
+        return self._game.move
+
+    def moving_player(self):
+        """! Zwraca gracza, którego jest ruch jako typ wyliczeniowy player.
+
+        @return Gracz, którego jest ruch.
+        """
+        return self._game.moving_player
 
     def _is_field_label(self, char):
         """! Sprawdza, czy znak jest ważnym podpisem pola.
@@ -88,7 +109,7 @@ class GameInterface:
         # Najpierw należy sprawdzić, czy na polu
         # z którego chcemy się ruszyć stoi kamień
         # gracza, który ma teraz swój ruch.
-        if (self._game.moving_player == 1):
+        if (self._game.moving_player == player.WHITE):
             field_state = state.WHITE
         else:
             field_state = state.BLACK
@@ -143,10 +164,10 @@ class GameInterface:
         self._game.set_field(*field1, state.EMPTY)
         self._game.set_field(*field2, on_field1)
 
-        if (self._game.moving_player == 1):
-            self._game.moving_player = 2
+        if (self._game.moving_player == player.WHITE):
+            self._game.moving_player = player.BLACK
         else:
-            self._game.moving_player = 1
+            self._game.moving_player = player.WHITE
 
     def move(self, move_str):
         """! Funkcja wykonująca ruch.

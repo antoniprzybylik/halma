@@ -23,6 +23,12 @@ class state(Enum):
     BLACK = 3
 
 
+class player(Enum):
+    """! Gracz. """
+    WHITE = 1
+    BLACK = 2
+
+
 class Game:
     """! Reprezentuje grę Halma.
 
@@ -51,7 +57,7 @@ class Game:
 
         self.mode = None
         self.move = 1  # Obecny ruch.
-        self.moving_player = 1  # Teraz ruszający się gracz.
+        self.moving_player = player.WHITE  # Teraz ruszający się gracz.
 
     def setup(self, mode):
         """! Ustawia grę.
@@ -257,8 +263,8 @@ class Game:
 
         return value
 
-    def _state_str(self, value):
-        """! Converts state to string. """
+    def _state_to_str(self, value):
+        """! Zamienia obiekt typu wyliczeniowego state na napis. """
 
         if (value == state.EMPTY):
             return 'EMPTY'
@@ -269,8 +275,32 @@ class Game:
 
         raise ValueError('Unknown state.')
 
-    def _state(self, string):
-        """! Converts string to state enum. """
+    def _str_to_state(self, string):
+        """! Zamienia napis na obiekt typu wyliczeniowego state. """
+
+        if (string == 'EMPTY'):
+            return state.EMPTY
+        if (string == 'WHITE'):
+            return state.WHITE
+        if (string == 'BLACK'):
+            return state.BLACK
+
+        raise ValueError('Unknown state.')
+
+    def _player_to_str(self, value):
+        """! Zamienia obiekt typu wyliczeniowego player na napis. """
+
+        if (value == state.EMPTY):
+            return 'EMPTY'
+        if (value == state.WHITE):
+            return 'WHITE'
+        if (value == state.BLACK):
+            return 'BLACK'
+
+        raise ValueError('Unknown state.')
+
+    def _str_to_player(self, string):
+        """! Zamienia napis na obiekt typu wyliczeniowego player. """
 
         if (string == 'EMPTY'):
             return state.EMPTY
@@ -289,13 +319,14 @@ class Game:
         @return Czy zapis się udał.
         """
 
-        str_board = [[self._state_str(self._board[i][j])
+        str_board = [[self._state_to_str(self._board[i][j])
                       for j in range(16)]
                      for i in range(16)]
 
         to_save = {
                 'mode': self.mode,
                 'move': self.move,
+                'moving_player': self._player_to_str(self.moving_player),
                 'board': str_board,
         }
 
@@ -330,10 +361,14 @@ class Game:
         if (self.move is None):
             raise ValueError('Corrupted file.')
 
+        self.moving_player = game_data.get('moving_player', None)
+        if (self.moving_player is None):
+            raise ValueError('Corrupted file.')
+
         str_board = game_data.get('board', None)
         if (str_board is None):
             raise ValueError('Corrupted file.')
 
-        self._board = [[self._state(str_board[i][j])
+        self._board = [[self._str_to_state(str_board[i][j])
                         for j in range(16)]
                        for i in range(16)]
