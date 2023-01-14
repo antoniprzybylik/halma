@@ -7,6 +7,7 @@
 
 import halma
 from halma import state
+import iface
 
 # Używam biblioteki curses
 # do implementacji TUI.
@@ -37,7 +38,8 @@ class HalmaTui:
 
     def __init__(self):
         self._stdscr = None
-        self._game = halma.Game()
+        game = halma.Game()
+        self._game_iface = iface.GameInterface(game)
 
     def _check_scr(self):
         """! Sprawdza, czy można uruchomić grę w trybie TUI.
@@ -182,7 +184,7 @@ class HalmaTui:
 
     def _draw_main_window(self):
         """! Draws main UI window. """
-        board = self._game.get_board()
+        board = self._game_iface.get_board()
 
         # Na górze rysujemy nagłówek.
         self._print_header(1, 'white')
@@ -251,12 +253,12 @@ class HalmaTui:
                     attr_key += 'WHITE'
 
                 if ((i+j) % 2 == 0):
-                    if (self._game.in_camp(i, j) != 'n'):
+                    if (self._game_iface.in_camp(i, j) != 'n'):
                         attr_key += 'CYAN'
                     else:
                         attr_key += 'WHITE'
                 else:
-                    if (self._game.in_camp(i, j) != 'n'):
+                    if (self._game_iface.in_camp(i, j) != 'n'):
                         attr_key += 'NAVY'
                     else:
                         attr_key += 'BLACK'
@@ -300,7 +302,14 @@ class HalmaTui:
                     break
 
             if (key == 'm'):
-                msg = self._dialog('Enter your move:', 7, 30)
+                move_str = self._dialog('Enter your move:', 7, 30)
+                move_str = move_str.rstrip()
+
+                # Dopóki nie udaje się wykonać ruchu wprowadzonego
+                # przez użytkownika: Wczytujemy ruch jeszcze raz.
+                while (not self._game_iface.move(move_str)):
+                    move_str = self._dialog('Invalid! Enter your move:', 7, 30)
+                    move_str = msg.rstrip()
 
     def _setup_colors(self):
         """! Inicjalizuje kolory, które będą używane w UI. """
@@ -376,7 +385,7 @@ class HalmaTui:
     def _setup(self):
         """! Funkcja ustawiająca grę. """
         # FIXME: Trzeba dać do wyboru.
-        self._game.setup('random')
+        self._game_iface.setup('random')
 
         # Sprawdzam, czy w danym terminalu
         # można uruchomić grę.
