@@ -309,7 +309,7 @@ class HalmaTui:
                 # przez użytkownika: Wczytujemy ruch jeszcze raz.
                 while (not self._game_iface.move(move_str)):
                     move_str = self._dialog('Invalid! Enter your move:', 7, 30)
-                    move_str = msg.rstrip()
+                    move_str = move_str.rstrip()
 
     def _setup_colors(self):
         """! Inicjalizuje kolory, które będą używane w UI. """

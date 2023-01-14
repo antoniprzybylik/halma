@@ -82,3 +82,75 @@ def test_setup_classic():
 
             if (game_iface.in_camp(i, j) == 'n'):
                 assert board[i][j] == state.EMPTY
+
+
+# Metoda move.
+#
+# Ta funkcja wykonuje ruch.
+
+def test_move1():
+    game = halma.Game()
+    game_iface = iface.GameInterface(game)
+
+    game.set_field(1, 1, state.WHITE)
+    game.set_field(2, 1, state.BLACK)
+
+    # Czy uda się wykonać ruch.
+    assert game_iface.move('bb-cc') is True
+
+
+def test_move2():
+    game = halma.Game()
+    game_iface = iface.GameInterface(game)
+
+    game.set_field(1, 1, state.WHITE)
+    game.set_field(2, 1, state.BLACK)
+
+    # Czy uda się wykonać ruch.
+    assert game_iface.move('bb-bc') is True
+
+
+def test_move3():
+    game = halma.Game()
+    game_iface = iface.GameInterface(game)
+
+    game.set_field(1, 1, state.WHITE)
+    game.set_field(2, 1, state.BLACK)
+
+    # Czy uda się wykonać ruch.
+    assert game_iface.move('bb-cb') is False
+
+
+def test_move4():
+    game = halma.Game()
+    game_iface = iface.GameInterface(game)
+
+    game.set_field(1, 1, state.WHITE)
+    game.set_field(2, 1, state.BLACK)
+
+    # Czy uda się wykonać ruch.
+    assert game_iface.move('bb-ac') is True
+
+
+def test_move5():
+    game = halma.Game()
+    game_iface = iface.GameInterface(game)
+
+    game.set_field(1, 3, state.WHITE)
+    game.set_field(2, 5, state.BLACK)
+    game.set_field(3, 4, state.BLACK)
+
+    # Czy uda się wykonać ruch.
+    assert game_iface.move('bd-ce') is True
+
+
+def test_move6():
+    game = halma.Game()
+    game_iface = iface.GameInterface(game)
+
+    game.set_field(1, 0, state.BLACK)
+    game.set_field(0, 3, state.BLACK)
+    game.set_field(1, 2, state.WHITE)
+
+    # Czy uda się wykonać ruch.
+    assert game_iface.move('bc-ac') is True
