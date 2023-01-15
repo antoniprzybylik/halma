@@ -36,7 +36,8 @@ class WindowTooSmallError(Exception):
 
 class EscapeInterrupt(Exception):
     """! Przerwanie w celu schowania dialog box'a. """
-    pass
+    def __init__(self):
+        super().__init__()
 
 
 class HalmaTui:
@@ -430,7 +431,7 @@ class HalmaTui:
     def _setup(self):
         """! Funkcja ustawiająca grę. """
         # FIXME: Trzeba dać do wyboru.
-        self._game_iface.setup('random')
+        self._game_iface.setup('classic')
 
         # Sprawdzam, czy w danym terminalu
         # można uruchomić grę.
