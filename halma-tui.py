@@ -337,6 +337,10 @@ class HalmaTui:
                     while (not self._game_iface.move(move_str)):
                         move_str = self._dialog('Invalid!\n Enter your move:',
                                                 8, 30)
+
+                        if (move_str is None):
+                            break
+
                         move_str = move_str.rstrip()
 
             if (key == 's'):
