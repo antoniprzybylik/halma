@@ -11,7 +11,6 @@
 #
 # Autor: Antoni Przybylik
 
-from halma.game import Game
 from halma.game import state
 from halma.game import player
 
@@ -238,8 +237,5 @@ class GameInterface:
     def load_game(self, filename):
         """! Wczytuje grę z pliku. """
 
-        game = Game()
-        game.load(filename)
-
-        del self._game
-        self.__init__(game)
+        self._game.load(filename)
+        self.__init__(self._game)

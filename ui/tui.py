@@ -8,6 +8,8 @@ from halma.game import state
 from halma.game import player
 from halma.iface import GameInterface
 
+from bots.random_bot import RandomBot
+
 # Używam biblioteki curses
 # do implementacji TUI.
 #
@@ -16,6 +18,7 @@ from halma.iface import GameInterface
 # w przypadku błędu.
 import curses
 from curses.textpad import Textbox
+from enum import Enum
 
 
 class TerminalNotSupportedError(Exception):
@@ -37,13 +40,19 @@ class EscapeInterrupt(Exception):
         super().__init__()
 
 
+class opponent(Enum):
+    """! Przeciwnik. """
+    HUMAN = 1
+    BOT = 2
+
+
 class HalmaTui:
     """! Reprezentuje interfejs graficzny. """
 
     def __init__(self):
         self._stdscr = None
-        game = Game()
-        self._game_iface = GameInterface(game)
+        self._game = Game()
+        self._game_iface = GameInterface(self._game)
 
     def _check_scr(self):
         """! Sprawdza, czy można uruchomić grę w trybie TUI.
@@ -340,6 +349,9 @@ class HalmaTui:
 
                         move_str = move_str.rstrip()
 
+                if (self._opponent == opponent.BOT):
+                    self._bot.make_move()
+
             if (key == 's'):
                 filename = self._dialog('Enter filename:', 7, 30)
 
@@ -449,6 +461,28 @@ class HalmaTui:
 
         # Wyłącz pokazywanie kursora.
         curses.curs_set(0)
+
+        self._game_setup()
+
+    def _game_setup(self):
+        while True:
+            opponent_str = self._dialog('Select your opponent:\n'
+                                        ' 1. Random bot.\n'
+                                        ' 2. Human.', 9, 54)
+
+            if (opponent_str is None):
+                continue
+
+            opponent_str = opponent_str.rstrip()
+            if (len(opponent_str) == 1 and
+                    opponent_str == '1' or opponent_str == '2'):
+                break
+
+        if (opponent_str == '1'):
+            self._opponent = opponent.BOT
+            self._bot = RandomBot(self._game)
+        else:
+            self._opponent = opponent.HUMAN
 
     def _exit(self):
         """! Funkcja na wyjście z gry. """
