@@ -11,6 +11,7 @@ from halma.game import Game
 from halma.iface import GameInterface
 
 from bots.random_bot import RandomBot
+from bots.forward_bot import ForwardBot
 
 # Używam biblioteki curses
 # do implementacji TUI.
@@ -467,7 +468,8 @@ class HalmaTui:
     def _game_setup(self):
         opponent_str = self._dialog('Select your opponent:\n'
                                     ' 1. Random bot.\n'
-                                    ' 2. Human.', 9, 54)
+                                    ' 2. Forward bot.\n'
+                                    ' 3. Human.', 11, 54)
 
         while True:
             if (opponent_str is None):
@@ -475,17 +477,21 @@ class HalmaTui:
 
             opponent_str = opponent_str.rstrip()
             if (len(opponent_str) == 1 and
-                    opponent_str == '1' or opponent_str == '2'):
+                    ord(opponent_str) in range(ord('1'), ord('3'))):
                 break
 
             opponent_str = self._dialog('Invalid!\n'
                                         ' Select your opponent:\n'
                                         ' 1. Random bot.\n'
-                                        ' 2. Human.', 11, 54)
+                                        ' 2. Forward bot.\n'
+                                        ' 3. Human.', 12, 54)
 
         if (opponent_str == '1'):
             self._opponent = OPPONENT.BOT
             self._bot = RandomBot(self._game)
+        elif (opponent_str == '2'):
+            self._opponent = OPPONENT.BOT
+            self._bot = ForwardBot(self._game)
         else:
             self._opponent = OPPONENT.HUMAN
 
