@@ -11,8 +11,8 @@
 #
 # Autor: Antoni Przybylik
 
-from halma.defs import state
-from halma.defs import player
+from halma.defs import STATE
+from halma.defs import PLAYER
 
 
 class GameInterface:
@@ -109,10 +109,10 @@ class GameInterface:
         # Najpierw należy sprawdzić, czy na polu
         # z którego chcemy się ruszyć stoi kamień
         # gracza, który ma teraz swój ruch.
-        if (self._game.moving_player == player.WHITE):
-            field_state = state.WHITE
+        if (self._game.moving_player == PLAYER.WHITE):
+            field_state = STATE.WHITE
         else:
-            field_state = state.BLACK
+            field_state = STATE.BLACK
 
         board = self._game.get_board()
         if (board[field1[0]][field1[1]] != field_state):
@@ -161,17 +161,17 @@ class GameInterface:
         """
 
         on_field1 = self._game.read_field(*field1)
-        self._game.set_field(*field1, state.EMPTY)
+        self._game.set_field(*field1, STATE.EMPTY)
         self._game.set_field(*field2, on_field1)
 
-        if (self._game.moving_player == player.WHITE):
+        if (self._game.moving_player == PLAYER.WHITE):
             # Jeżeli teraz ruszał się biały, to
             # teraz jest kolej na czarnego.
-            self._game.moving_player = player.BLACK
+            self._game.moving_player = PLAYER.BLACK
         else:
             # Jeżeli w danym ruchu ruszył się czarny,
             # przechodzimy do następnego ruchu.
-            self._game.moving_player = player.WHITE
+            self._game.moving_player = PLAYER.WHITE
             self._game.move += 1
 
     def move(self, move_str):

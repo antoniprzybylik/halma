@@ -6,7 +6,7 @@
 from pytest import raises
 
 from halma.game import Game
-from halma.game import state
+from halma.defs import STATE
 
 
 # Metody set_field, read_field
@@ -19,15 +19,15 @@ from halma.game import state
 def test_set_read1():
     game = Game()
 
-    game.set_field(10, 10, state.BLACK)
-    assert game.read_field(10, 10) == state.BLACK
+    game.set_field(10, 10, STATE.BLACK)
+    assert game.read_field(10, 10) == STATE.BLACK
 
 
 def test_set_read2():
     game = Game()
 
-    game.set_field(0, 0, state.WHITE)
-    assert game.read_field(0, 0) == state.WHITE
+    game.set_field(0, 0, STATE.WHITE)
+    assert game.read_field(0, 0) == STATE.WHITE
 
 
 # Metody save, load

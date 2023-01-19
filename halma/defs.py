@@ -3,14 +3,26 @@
 from enum import Enum
 
 
-class state(Enum):
+class STATE(Enum):
     """! Stan pola planszy. """
     EMPTY = 1
     WHITE = 2
     BLACK = 3
 
 
-class player(Enum):
+class PLAYER(Enum):
     """! Gracz. """
     WHITE = 1
     BLACK = 2
+
+
+class CAMP(Enum):
+    """! Obóz. """
+    WHITE = 1
+    BLACK = 2
+
+
+class OPPONENT(Enum):
+    """! Przeciwnik. """
+    HUMAN = 1
+    BOT = 2

@@ -5,8 +5,9 @@
 # Autor: Antoni Przybylik
 
 from halma.game import Game
-from halma.game import state
 from halma.iface import GameInterface
+
+from halma.defs import STATE
 
 # Metoda in_camp.
 #
@@ -75,13 +76,13 @@ def test_setup_classic():
     for i in range(16):
         for j in range(16):
             if (game_iface.in_camp(i, j) == 'w'):
-                assert board[i][j] == state.WHITE
+                assert board[i][j] == STATE.WHITE
 
             if (game_iface.in_camp(i, j) == 'b'):
-                assert board[i][j] == state.BLACK
+                assert board[i][j] == STATE.BLACK
 
             if (game_iface.in_camp(i, j) == 'n'):
-                assert board[i][j] == state.EMPTY
+                assert board[i][j] == STATE.EMPTY
 
 
 # Metoda move.
@@ -92,8 +93,8 @@ def test_move1():
     game = Game()
     game_iface = GameInterface(game)
 
-    game.set_field(1, 1, state.WHITE)
-    game.set_field(2, 1, state.BLACK)
+    game.set_field(1, 1, STATE.WHITE)
+    game.set_field(2, 1, STATE.BLACK)
 
     # Czy uda się wykonać ruch.
     assert game_iface.move('bb-cc') is True
@@ -103,8 +104,8 @@ def test_move2():
     game = Game()
     game_iface = GameInterface(game)
 
-    game.set_field(1, 1, state.WHITE)
-    game.set_field(2, 1, state.BLACK)
+    game.set_field(1, 1, STATE.WHITE)
+    game.set_field(2, 1, STATE.BLACK)
 
     # Czy uda się wykonać ruch.
     assert game_iface.move('bb-bc') is True
@@ -114,8 +115,8 @@ def test_move3():
     game = Game()
     game_iface = GameInterface(game)
 
-    game.set_field(1, 1, state.WHITE)
-    game.set_field(2, 1, state.BLACK)
+    game.set_field(1, 1, STATE.WHITE)
+    game.set_field(2, 1, STATE.BLACK)
 
     # Czy uda się wykonać ruch.
     assert game_iface.move('bb-cb') is False
@@ -125,8 +126,8 @@ def test_move4():
     game = Game()
     game_iface = GameInterface(game)
 
-    game.set_field(1, 1, state.WHITE)
-    game.set_field(2, 1, state.BLACK)
+    game.set_field(1, 1, STATE.WHITE)
+    game.set_field(2, 1, STATE.BLACK)
 
     # Czy uda się wykonać ruch.
     assert game_iface.move('bb-ac') is True
@@ -136,9 +137,9 @@ def test_move5():
     game = Game()
     game_iface = GameInterface(game)
 
-    game.set_field(1, 3, state.WHITE)
-    game.set_field(2, 5, state.BLACK)
-    game.set_field(3, 4, state.BLACK)
+    game.set_field(1, 3, STATE.WHITE)
+    game.set_field(2, 5, STATE.BLACK)
+    game.set_field(3, 4, STATE.BLACK)
 
     # Czy uda się wykonać ruch.
     assert game_iface.move('bd-ce') is True
@@ -148,9 +149,9 @@ def test_move6():
     game = Game()
     game_iface = GameInterface(game)
 
-    game.set_field(1, 0, state.BLACK)
-    game.set_field(0, 3, state.BLACK)
-    game.set_field(1, 2, state.WHITE)
+    game.set_field(1, 0, STATE.BLACK)
+    game.set_field(0, 3, STATE.BLACK)
+    game.set_field(1, 2, STATE.WHITE)
 
     # Czy uda się wykonać ruch.
     assert game_iface.move('bc-ac') is True

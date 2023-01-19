@@ -4,8 +4,8 @@
 #
 # Autor: Antoni Przybylik
 
-from halma.defs import state
-from halma.defs import player
+from halma.defs import STATE
+from halma.defs import PLAYER
 
 from random import randint
 import json
@@ -40,13 +40,13 @@ class Game:
 
     def __init__(self):
         """! Konstruktor klasy game. """
-        self._board = [[state.EMPTY]*16 for i in range(16)]
+        self._board = [[STATE.EMPTY]*16 for i in range(16)]
 
         self.supported_modes = ['classic', 'random']
 
         self.mode = None
         self.move = 1  # Obecny ruch.
-        self.moving_player = player.WHITE  # Teraz ruszający się gracz.
+        self.moving_player = PLAYER.WHITE  # Teraz ruszający się gracz.
 
     def setup(self, mode):
         """! Ustawia grę.
@@ -79,12 +79,12 @@ class Game:
         # Ustawiamy obóz Czarnego.
         for i in range(0, 5):
             for j in range(0, [5, 5, 4, 3, 2][i]):
-                self._board[i][j] = state.BLACK
+                self._board[i][j] = STATE.BLACK
 
         # Ustawiamy obóz Białego.
         for i in range(0, 5):
             for j in range(0, [5, 5, 4, 3, 2][i]):
-                self._board[15 - i][15 - j] = state.WHITE
+                self._board[15 - i][15 - j] = STATE.WHITE
 
     def _random_mode_setup(self):
         """! Funkcja pomocnicza metody setup.
@@ -100,10 +100,10 @@ class Game:
                 i = randint(0, 15)
                 j = randint(0, 15)
 
-                if (self._board[i][j] == state.EMPTY):
+                if (self._board[i][j] == STATE.EMPTY):
                     break
 
-            self._board[i][j] = state.BLACK
+            self._board[i][j] = STATE.BLACK
 
         # Ustawiamy białe pionki.
         for k in range(0, 19):
@@ -113,10 +113,10 @@ class Game:
                 i = randint(0, 15)
                 j = randint(0, 15)
 
-                if (self._board[i][j] == state.EMPTY):
+                if (self._board[i][j] == STATE.EMPTY):
                     break
 
-            self._board[i][j] = state.WHITE
+            self._board[i][j] = STATE.WHITE
 
     def moves(self, y, x):
         """! Znajduje wszystkie pola na które można wykonać ruch.
@@ -190,13 +190,13 @@ class Game:
 
         for dy, dx in zip(delta_y, delta_x):
             if (self._validate_pos(y+dy, x+dx, visited) and
-                self._board[y+dy][x+dx] == state.EMPTY):    # noqa E129
+                self._board[y+dy][x+dx] == STATE.EMPTY):    # noqa E129
 
                 if (len(visited) == 0):
                     possible.append((y+dy, x+dx))
 
             elif (self._validate_pos(y+2*dy, x+2*dx, visited) and
-                  self._board[y+2*dy][x+2*dx] == state.EMPTY):
+                  self._board[y+2*dy][x+2*dx] == STATE.EMPTY):
 
                 possible.append((y+2*dy, x+2*dx))
 
@@ -228,7 +228,7 @@ class Game:
         if (not self._pos_on_board(y, x)):
             raise ValueError('No such a field.')
 
-        if (value not in state):
+        if (value not in STATE):
             raise ValueError('Not a valid value for field.')
 
         self._board[y][x] = value
@@ -247,7 +247,7 @@ class Game:
 
         value = self._board[y][x]
 
-        if (value not in state):
+        if (value not in STATE):
             raise ValueError('Corrupted data.')
 
         return value
@@ -255,11 +255,11 @@ class Game:
     def _state_to_str(self, value):
         """! Zamienia obiekt typu wyliczeniowego state na napis. """
 
-        if (value == state.EMPTY):
+        if (value == STATE.EMPTY):
             return 'EMPTY'
-        if (value == state.WHITE):
+        if (value == STATE.WHITE):
             return 'WHITE'
-        if (value == state.BLACK):
+        if (value == STATE.BLACK):
             return 'BLACK'
 
         raise ValueError('Unknown state.')
@@ -268,20 +268,20 @@ class Game:
         """! Zamienia napis na obiekt typu wyliczeniowego state. """
 
         if (string == 'EMPTY'):
-            return state.EMPTY
+            return STATE.EMPTY
         if (string == 'WHITE'):
-            return state.WHITE
+            return STATE.WHITE
         if (string == 'BLACK'):
-            return state.BLACK
+            return STATE.BLACK
 
         raise ValueError('Unknown state.')
 
     def _player_to_str(self, value):
         """! Zamienia obiekt typu wyliczeniowego player na napis. """
 
-        if (value == player.WHITE):
+        if (value == PLAYER.WHITE):
             return 'WHITE'
-        if (value == player.BLACK):
+        if (value == PLAYER.BLACK):
             return 'BLACK'
 
         raise ValueError('Unknown state.')
@@ -290,9 +290,9 @@ class Game:
         """! Zamienia napis na obiekt typu wyliczeniowego player. """
 
         if (string == 'WHITE'):
-            return player.WHITE
+            return PLAYER.WHITE
         if (string == 'BLACK'):
-            return player.BLACK
+            return PLAYER.BLACK
 
         raise ValueError('Unknown state.')
 

@@ -2,8 +2,8 @@
 #
 # Autor: Antoni Przybylik
 
-from halma.defs import state
-from halma.defs import player
+from halma.defs import STATE
+from halma.defs import PLAYER
 
 from bots.generic import GameBot
 
@@ -26,10 +26,10 @@ class RandomBot(GameBot):
             for j in range(0, 16):
                 field = board[i][j]
 
-                if ((field == state.BLACK and
-                     moving_player == player.BLACK) or
-                    (field == state.WHITE and
-                     moving_player == player.WHITE)):
+                if ((field == STATE.BLACK and
+                     moving_player == PLAYER.BLACK) or
+                    (field == STATE.WHITE and
+                     moving_player == PLAYER.WHITE)):
                     my_positions.append((i, j))
 
         for pos_from in my_positions:

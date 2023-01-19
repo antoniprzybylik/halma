@@ -14,7 +14,7 @@ from tabulate import tabulate
 from ast import literal_eval
 
 from halma.game import Game
-from halma.game import state
+from halma.defs import STATE
 
 
 class HaSh(cmd2.Cmd):
@@ -275,11 +275,11 @@ class HaSh(cmd2.Cmd):
                     print('\033[31mH\033[0m', end=' ')
                     continue
 
-                if (board[i][j] == state.EMPTY):
+                if (board[i][j] == STATE.EMPTY):
                     print('\033[33m1\033[0m', end=' ')
-                elif (board[i][j] == state.WHITE):
+                elif (board[i][j] == STATE.WHITE):
                     print('\033[36m2\033[0m', end=' ')
-                elif (board[i][j] == state.BLACK):
+                elif (board[i][j] == STATE.BLACk):
                     print('\033[32m3\033[0m', end=' ')
                 else:
                     raise TypeError('Invalid type for field.')
@@ -321,11 +321,11 @@ class HaSh(cmd2.Cmd):
         x = int(argv[1])
 
         if (argv[2] == 'EMPTY'):
-            game.set_field(y, x, state.EMPTY)
+            game.set_field(y, x, STATE.EMPTY)
         elif (argv[2] == 'WHITE'):
-            game.set_field(y, x, state.WHITE)
+            game.set_field(y, x, STATE.WHITE)
         elif (argv[2] == 'BLACK'):
-            game.set_field(y, x, state.BLACK)
+            game.set_field(y, x, STATE.BLACk)
         else:
             raise ValueError('Not a valid value for field.')
 
@@ -364,11 +364,11 @@ class HaSh(cmd2.Cmd):
         x = int(argv[1])
 
         value = game.read_field(y, x)
-        if (value == state.EMPTY):
+        if (value == STATE.EMPTY):
             print('EMPTY')
-        elif (value == state.WHITE):
+        elif (value == STATE.WHITE):
             print('WHITE')
-        elif (value == state.BLACK):
+        elif (value == STATE.BLACk):
             print('BLACK')
         else:
             raise ValueError('Corrupted data.')

@@ -3,8 +3,9 @@
 #
 # Autor: Antoni Przybylik
 
-from halma.defs import state
-from halma.defs import player
+from halma.defs import STATE
+from halma.defs import PLAYER
+from halma.defs import OPPONENT
 
 from halma.game import Game
 from halma.iface import GameInterface
@@ -19,7 +20,6 @@ from bots.random_bot import RandomBot
 # w przypadku błędu.
 import curses
 from curses.textpad import Textbox
-from enum import Enum
 
 
 class TerminalNotSupportedError(Exception):
@@ -39,12 +39,6 @@ class EscapeInterrupt(Exception):
     """! Przerwanie w celu schowania dialog box'a. """
     def __init__(self):
         super().__init__()
-
-
-class opponent(Enum):
-    """! Przeciwnik. """
-    HUMAN = 1
-    BOT = 2
 
 
 class HalmaTui:
@@ -99,7 +93,7 @@ class HalmaTui:
         @param player Gracz którego jest ruch.
         """
 
-        if (plr == player.WHITE):
+        if (plr == PLAYER.WHITE):
             plr_str = 'white'
         else:
             plr_str = 'black'
@@ -268,15 +262,15 @@ class HalmaTui:
                 field_char = ' '
                 attr_key = ''
 
-                if (board[i][j] == state.WHITE):
+                if (board[i][j] == STATE.WHITE):
                     attr_key += 'WHITE'
                     field_char = 'w'
 
-                if (board[i][j] == state.BLACK):
+                if (board[i][j] == STATE.BLACK):
                     attr_key += 'BLACK'
                     field_char = 'm'
 
-                if (board[i][j] == state.EMPTY):
+                if (board[i][j] == STATE.EMPTY):
                     # I tak nie rysujemy pionka,
                     # więc jego kolor nie ma
                     # znaczenia.
@@ -350,7 +344,7 @@ class HalmaTui:
 
                         move_str = move_str.rstrip()
 
-                if (self._opponent == opponent.BOT):
+                if (self._opponent == OPPONENT.BOT):
                     self._bot.make_move()
 
             if (key == 's'):
@@ -480,10 +474,10 @@ class HalmaTui:
                 break
 
         if (opponent_str == '1'):
-            self._opponent = opponent.BOT
+            self._opponent = OPPONENT.BOT
             self._bot = RandomBot(self._game)
         else:
-            self._opponent = opponent.HUMAN
+            self._opponent = OPPONENT.HUMAN
 
     def _exit(self):
         """! Funkcja na wyjście z gry. """
