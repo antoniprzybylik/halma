@@ -2,8 +2,8 @@
 #
 # Autor: Antoni Przybylik
 
-from halma.game import state
-from halma.game import player
+from halma.defs import state
+from halma.defs import player
 
 
 class GameBot:

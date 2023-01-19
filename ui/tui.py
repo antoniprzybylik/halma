@@ -3,9 +3,10 @@
 #
 # Autor: Antoni Przybylik
 
+from halma.defs import state
+from halma.defs import player
+
 from halma.game import Game
-from halma.game import state
-from halma.game import player
 from halma.iface import GameInterface
 
 from bots.random_bot import RandomBot
