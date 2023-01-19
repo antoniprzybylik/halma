@@ -29,7 +29,6 @@ class Game:
 
     Metody publiczne:
         setup()
-        in_camp()
         moves()
         get_board()
         set_field()

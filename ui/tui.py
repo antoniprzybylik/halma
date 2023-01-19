@@ -277,12 +277,12 @@ class HalmaTui:
                     attr_key += 'WHITE'
 
                 if ((i+j) % 2 == 0):
-                    if (self._game_iface.in_camp(i, j) != 'n'):
+                    if (self._game_iface.in_camp(i, j) is not None):
                         attr_key += 'CYAN'
                     else:
                         attr_key += 'WHITE'
                 else:
-                    if (self._game_iface.in_camp(i, j) != 'n'):
+                    if (self._game_iface.in_camp(i, j) is not None):
                         attr_key += 'NAVY'
                     else:
                         attr_key += 'BLACK'

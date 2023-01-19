@@ -13,6 +13,7 @@
 
 from halma.defs import STATE
 from halma.defs import PLAYER
+from halma.defs import CAMP
 
 
 class GameInterface:
@@ -208,14 +209,14 @@ class GameInterface:
         # Sprawdzamy, czy jest w obozie Czarnego.
         if (x in range(0, 5) and
                 y in range(0, [5, 5, 4, 3, 2][x])):
-            return 'b'
+            return CAMP.BLACK
 
         # Sprawdzamy, czy jest w obozie Białego.
         if (x in range(11, 16) and
                 15-y in range(0, [5, 5, 4, 3, 2][15-x])):
-            return 'w'
+            return CAMP.WHITE
 
-        return 'n'
+        return None
 
     def end_of_game(self):
         """! Sprawdza, czy jest koniec gry.
