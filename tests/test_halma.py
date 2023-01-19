@@ -5,8 +5,8 @@
 
 from pytest import raises
 
-import halma
-from halma import state
+from halma.game import Game
+from halma.game import state
 
 
 # Metody set_field, read_field
@@ -17,14 +17,14 @@ from halma import state
 
 
 def test_set_read1():
-    game = halma.Game()
+    game = Game()
 
     game.set_field(10, 10, state.BLACK)
     assert game.read_field(10, 10) == state.BLACK
 
 
 def test_set_read2():
-    game = halma.Game()
+    game = Game()
 
     game.set_field(0, 0, state.WHITE)
     assert game.read_field(0, 0) == state.WHITE
@@ -37,11 +37,11 @@ def test_set_read2():
 
 
 def test_save_load1():
-    game = halma.Game()
+    game = Game()
     game.setup('random')
     game.save('/tmp/random_game.json')
 
-    game2 = halma.Game()
+    game2 = Game()
     game2.load('/tmp/random_game.json')
 
     assert game.mode == game2.mode
@@ -54,5 +54,5 @@ def test_save_load2():
         fp.write('{"mode": "classic", "move": "aalmakota"}')
 
     with raises(ValueError):
-        game = halma.Game()
+        game = Game()
         game.load('/tmp/broken_file.json')

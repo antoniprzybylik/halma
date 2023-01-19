@@ -4,9 +4,9 @@
 #
 # Autor: Antoni Przybylik
 
-import halma
-from halma import state
-import iface
+from halma.game import Game
+from halma.game import state
+from halma.iface import GameInterface
 
 # Metoda in_camp.
 #
@@ -15,43 +15,43 @@ import iface
 
 
 def test_in_camp1():
-    game = halma.Game()
-    game_iface = iface.GameInterface(game)
+    game = Game()
+    game_iface = GameInterface(game)
 
     assert game_iface.in_camp(0, 0) == 'b'
 
 
 def test_in_camp2():
-    game = halma.Game()
-    game_iface = iface.GameInterface(game)
+    game = Game()
+    game_iface = GameInterface(game)
 
     assert game_iface.in_camp(1, 4) == 'b'
 
 
 def test_in_camp3():
-    game = halma.Game()
-    game_iface = iface.GameInterface(game)
+    game = Game()
+    game_iface = GameInterface(game)
 
     assert game_iface.in_camp(1, 5) == 'n'
 
 
 def test_in_camp4():
-    game = halma.Game()
-    game_iface = iface.GameInterface(game)
+    game = Game()
+    game_iface = GameInterface(game)
 
     assert game_iface.in_camp(15, 15) == 'w'
 
 
 def test_in_camp5():
-    game = halma.Game()
-    game_iface = iface.GameInterface(game)
+    game = Game()
+    game_iface = GameInterface(game)
 
     assert game_iface.in_camp(14, 14) == 'w'
 
 
 def test_in_camp6():
-    game = halma.Game()
-    game_iface = iface.GameInterface(game)
+    game = Game()
+    game_iface = GameInterface(game)
 
     assert game_iface.in_camp(8, 8) == 'n'
 
@@ -62,8 +62,8 @@ def test_in_camp6():
 
 
 def test_setup_classic():
-    game = halma.Game()
-    game_iface = iface.GameInterface(game)
+    game = Game()
+    game_iface = GameInterface(game)
     game_iface.setup('classic')
 
     board = game_iface.get_board()
@@ -89,8 +89,8 @@ def test_setup_classic():
 # Ta funkcja wykonuje ruch.
 
 def test_move1():
-    game = halma.Game()
-    game_iface = iface.GameInterface(game)
+    game = Game()
+    game_iface = GameInterface(game)
 
     game.set_field(1, 1, state.WHITE)
     game.set_field(2, 1, state.BLACK)
@@ -100,8 +100,8 @@ def test_move1():
 
 
 def test_move2():
-    game = halma.Game()
-    game_iface = iface.GameInterface(game)
+    game = Game()
+    game_iface = GameInterface(game)
 
     game.set_field(1, 1, state.WHITE)
     game.set_field(2, 1, state.BLACK)
@@ -111,8 +111,8 @@ def test_move2():
 
 
 def test_move3():
-    game = halma.Game()
-    game_iface = iface.GameInterface(game)
+    game = Game()
+    game_iface = GameInterface(game)
 
     game.set_field(1, 1, state.WHITE)
     game.set_field(2, 1, state.BLACK)
@@ -122,8 +122,8 @@ def test_move3():
 
 
 def test_move4():
-    game = halma.Game()
-    game_iface = iface.GameInterface(game)
+    game = Game()
+    game_iface = GameInterface(game)
 
     game.set_field(1, 1, state.WHITE)
     game.set_field(2, 1, state.BLACK)
@@ -133,8 +133,8 @@ def test_move4():
 
 
 def test_move5():
-    game = halma.Game()
-    game_iface = iface.GameInterface(game)
+    game = Game()
+    game_iface = GameInterface(game)
 
     game.set_field(1, 3, state.WHITE)
     game.set_field(2, 5, state.BLACK)
@@ -145,8 +145,8 @@ def test_move5():
 
 
 def test_move6():
-    game = halma.Game()
-    game_iface = iface.GameInterface(game)
+    game = Game()
+    game_iface = GameInterface(game)
 
     game.set_field(1, 0, state.BLACK)
     game.set_field(0, 3, state.BLACK)

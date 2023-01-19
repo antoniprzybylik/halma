@@ -9,14 +9,12 @@
 #
 # Autor: Antoni Przybylik
 
-import readline
-import sys
 import cmd2
 from tabulate import tabulate
 from ast import literal_eval
 
-import halma
-from halma import state
+from halma.game import Game
+from halma.game import state
 
 
 class HaSh(cmd2.Cmd):
@@ -80,7 +78,7 @@ class HaSh(cmd2.Cmd):
             print('Error: Name already taken.')
             return
 
-        self.games[argv[0]] = halma.game()
+        self.games[argv[0]] = Game()
 
     def do_destroy(self, arg_str):
         """

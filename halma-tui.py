@@ -5,10 +5,10 @@
 #
 # Autor: Antoni Przybylik
 
-import halma
-from halma import state
-from halma import player
-import iface
+from halma.game import Game
+from halma.game import state
+from halma.game import player
+from halma.iface import GameInterface
 
 # Używam biblioteki curses
 # do implementacji TUI.
@@ -45,8 +45,8 @@ class HalmaTui:
 
     def __init__(self):
         self._stdscr = None
-        game = halma.Game()
-        self._game_iface = iface.GameInterface(game)
+        game = Game()
+        self._game_iface = GameInterface(game)
 
     def _check_scr(self):
         """! Sprawdza, czy można uruchomić grę w trybie TUI.
