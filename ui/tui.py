@@ -330,22 +330,27 @@ class HalmaTui:
             if (key == 'm'):
                 move_str = self._dialog('Enter your move:', 7, 30)
 
-                if (move_str is not None):
+                while True:
+                    # Sprawdzamy, czy użytkownik nie
+                    # zamknął dialog boxa klawiszem escape.
+                    if (move_str is None):
+                        break
+
                     move_str = move_str.rstrip()
+
+                    # Próbujemy wykonać ruch.
+                    if (self._game_iface.move(move_str)):
+                        # FIXME: To bardzo złe miejsce na
+                        #        implementację ruchu bota.
+                        if (self._opponent == OPPONENT.BOT):
+                            self._bot.make_move()
+
+                        break
 
                     # Dopóki nie udaje się wykonać ruchu wprowadzonego
                     # przez użytkownika: Wczytujemy ruch jeszcze raz.
-                    while (not self._game_iface.move(move_str)):
-                        move_str = self._dialog('Invalid!\n Enter your move:',
-                                                8, 30)
-
-                        if (move_str is None):
-                            break
-
-                        move_str = move_str.rstrip()
-
-                if (self._opponent == OPPONENT.BOT):
-                    self._bot.make_move()
+                    move_str = self._dialog('Invalid!\n Enter your move:',
+                                            8, 30)
 
             if (key == 's'):
                 filename = self._dialog('Enter filename:', 7, 30)
