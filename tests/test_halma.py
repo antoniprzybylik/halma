@@ -1,5 +1,5 @@
 # Testy jednostkowe dla metod klasy Game,
-# która jest w pliku halma.py.
+# która jest w pliku halma/game.py.
 #
 # Autor: Antoni Przybylik
 

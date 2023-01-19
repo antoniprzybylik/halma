@@ -1,6 +1,6 @@
 # Testy jednostkowe dla metod klasy
 # GameInterface znajdującej się w pliku
-# iface.py
+# halma/iface.py
 #
 # Autor: Antoni Przybylik
 
