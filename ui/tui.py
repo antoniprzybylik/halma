@@ -460,11 +460,11 @@ class HalmaTui:
         self._game_setup()
 
     def _game_setup(self):
-        while True:
-            opponent_str = self._dialog('Select your opponent:\n'
-                                        ' 1. Random bot.\n'
-                                        ' 2. Human.', 9, 54)
+        opponent_str = self._dialog('Select your opponent:\n'
+                                    ' 1. Random bot.\n'
+                                    ' 2. Human.', 9, 54)
 
+        while True:
             if (opponent_str is None):
                 continue
 
@@ -472,6 +472,11 @@ class HalmaTui:
             if (len(opponent_str) == 1 and
                     opponent_str == '1' or opponent_str == '2'):
                 break
+
+            opponent_str = self._dialog('Invalid!\n'
+                                        ' Select your opponent:\n'
+                                        ' 1. Random bot.\n'
+                                        ' 2. Human.', 11, 54)
 
         if (opponent_str == '1'):
             self._opponent = OPPONENT.BOT
