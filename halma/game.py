@@ -19,23 +19,7 @@ class ModeError(Exception):
 
 
 class Game:
-    """! Reprezentuje grę Halma.
-
-    Parametry publiczne:
-        supported_modes
-        mode
-        move
-        moving_player
-
-    Metody publiczne:
-        setup()
-        moves()
-        get_board()
-        set_field()
-        read_field()
-        save()
-        load()
-    """
+    """! Reprezentuje grę Halma. """
 
     def __init__(self):
         """! Konstruktor klasy game. """
