@@ -4,7 +4,9 @@
 #
 # Autor: Antoni Przybylik
 
-from enum import Enum
+from halma.defs import state
+from halma.defs import player
+
 from random import randint
 import json
 
@@ -14,19 +16,6 @@ class ModeError(Exception):
 
     def __init__(self, obj):
         super().__init__('Unknown or invalid mode.')
-
-
-class state(Enum):
-    """! Stan pola planszy. """
-    EMPTY = 1
-    WHITE = 2
-    BLACK = 3
-
-
-class player(Enum):
-    """! Gracz. """
-    WHITE = 1
-    BLACK = 2
 
 
 class Game:
