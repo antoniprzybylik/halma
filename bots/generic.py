@@ -5,6 +5,7 @@
 
 from halma.defs import STATE
 from halma.defs import PLAYER
+from halma.defs import CAMP
 
 from halma.player import Player
 
@@ -40,6 +41,27 @@ class GameBot(Player):
             # przechodzimy do następnego ruchu.
             self._game.moving_player = PLAYER.WHITE
             self._game.move += 1
+
+    def _in_camp(self, y, x):
+        """! Sprawdza w jakim obozie znajduje się pole.
+
+        @param y Współrzędna Y pola.
+        @param x Współrzędna X pola.
+
+        @return W jakim obozie znajduje się pole.
+        """
+
+        # Sprawdzamy, czy jest w obozie Czarnego.
+        if (x in range(0, 5) and
+                y in range(0, [5, 5, 4, 3, 2][x])):
+            return CAMP.BLACK
+
+        # Sprawdzamy, czy jest w obozie Białego.
+        if (x in range(11, 16) and
+                15-y in range(0, [5, 5, 4, 3, 2][15-x])):
+            return CAMP.WHITE
+
+        return None
 
     def make_move(self):
         """! Wykonuje ruch. """

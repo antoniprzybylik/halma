@@ -197,9 +197,6 @@ class GameInterface:
     def in_camp(self, y, x):
         """! Sprawdza w jakim obozie znajduje się pole.
 
-        Zwraca 'w' jeśli w białym, 'b' jeśli w czarnym,
-        'n' jeśli w żadnym.
-
         @param y Współrzędna Y pola.
         @param x Współrzędna X pola.
 
