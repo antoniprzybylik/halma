@@ -4,6 +4,8 @@
 # Autor: Antoni Przybylik
 
 from halma.engine import Engine
+from halma.iface import GameInterface
+
 from halma.defs import STATE
 
 
@@ -52,4 +54,14 @@ def test_dump_load():
 # wykonać z danego pola.
 
 
-# TODO: Wszystko.
+possible_moves1 = [(3, 3), (2, 4), (4, 2)]
+
+
+def test_moves1():
+    engine = Engine()
+    game_iface = GameInterface(engine)
+    game_iface.setup('classic')
+
+    possible_moves = engine.moves(2, 2)
+
+    assert str(possible_moves) == str(possible_moves1)
