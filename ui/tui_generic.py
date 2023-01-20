@@ -267,7 +267,7 @@ class TuiEngine:
         pos_y = screen_y // 2
 
         self._stdscr.clear()
-        self._stdscr.addstr(pos_x, pos_y, string)
+        self._stdscr.addstr(pos_y, pos_x, string)
         self._stdscr.refresh()
 
         # Czekamy na wciśnięcie dowolnego klawisza.
