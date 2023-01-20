@@ -232,6 +232,20 @@ class TuiEngine:
 
         return input_str
 
+    def splash(self, string):
+        screen_y, screen_x = self._stdscr.getmaxyx()
+
+        # Pozycja dialog boxa.
+        pos_x = (screen_x - len(string)) // 2
+        pos_y = screen_y // 2
+
+        self._stdscr.clear()
+        self._stdscr.addstr(pos_x, pos_y, string)
+        self._stdscr.refresh()
+
+        # Czekamy na wciśnięcie dowolnego klawisza.
+        self._stdscr.getkey()
+
     def draw_main_window(self, board,
                          current_move,
                          moving_player,

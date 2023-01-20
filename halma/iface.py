@@ -215,17 +215,52 @@ class GameInterface:
 
         return None
 
-    def end_of_game(self):
+    def get_winner(self):
         """! Sprawdza, czy jest koniec gry.
 
-        Zwraca 1 dla białego, 2 dla czarnego,
-        None jeśli gra wciąż trwa.
+        Zwraca zwycięzcę w typie wyliczeniowym
+        PLAYER.
 
-        @return Numer zwycięzcy.
+        @return Zwycięzca.
         """
 
-        # TODO: Wszystko.
-        pass
+        board = self._engine.get_board()
+
+        # Gra kończy się gdy w obozie
+        # są wszystkie pola zajęte i
+        # jest tam co najmniej jeden
+        # kamień przeciwnika.
+        all_full = True
+        enemy_in = False
+
+        # Sprawdzamy obóz Czarnego.
+        for i in range(0, 5):
+            for j in range(0, [5, 5, 4, 3, 2][i]):
+                if (board[i][j] == STATE.EMPTY):
+                    all_full = False
+
+                if (board[i][j] == STATE.WHITE):
+                    enemy_in = True
+
+        if (all_full and enemy_in):
+            return PLAYER.WHITE
+
+        all_full = True
+        enemy_in = False
+
+        # Sprawdzamy obóz Białego.
+        for i in range(0, 5):
+            for j in range(0, [5, 5, 4, 3, 2][i]):
+                if (board[15 - i][15 - j] == STATE.EMPTY):
+                    all_full = False
+
+                if (board[i][j] == STATE.BLACK):
+                    enemy_in = False
+
+        if (all_full and enemy_in):
+            return PLAYER.BLACK
+
+        return None
 
     def dump_game_state(self):
         """! Zapisuje stan gry w słowniku.

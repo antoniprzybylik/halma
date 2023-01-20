@@ -50,6 +50,7 @@ class HalmaTui:
                     msg = msg.rstrip()
 
                     if (msg == 'YES'):
+                        # Kończymy pętlę główną gry.
                         break
 
             if (key == 'm'):
@@ -57,6 +58,21 @@ class HalmaTui:
                     self._game.get_player(PLAYER.WHITE).make_move()
                 else:
                     self._game.get_player(PLAYER.BLACK).make_move()
+
+                # Sprawdzamy wygraną.
+                winner = self._game_iface.get_winner()
+
+                if (winner == PLAYER.WHITE):
+                    self._ui.splash('White won!')
+
+                    # Kończymy pętlę główną gry.
+                    break
+
+                if (winner == PLAYER.BLACK):
+                    self._ui.splash('Black won!')
+
+                    # Kończymy pętlę główną gry.
+                    break
 
             if (key == 's'):
                 filename = self._tui.dialog('Enter filename:', 7, 30)
