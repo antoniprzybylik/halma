@@ -13,13 +13,13 @@ from halma.player import Player
 class GameBot(Player):
     """! Bazowa klasa bota. """
 
-    def __init__(self, plr, game):
+    def __init__(self, plr, engine):
         """! Konstruktor klasy GameBot.
 
         @param plr Gracz (biały/czarny).
-        @param game Referencja na obiekt Game.
+        @param engine Referencja na obiekt Engine.
         """
-        super().__init__(plr, game)
+        super().__init__(plr, engine)
 
     def _apply_move(self, field1, field2):
         """! Wykonuje ruch.
@@ -28,19 +28,19 @@ class GameBot(Player):
         @param field2 Pole na które chcemy się ruszyć.
         """
 
-        on_field1 = self._game.read_field(*field1)
-        self._game.set_field(*field1, STATE.EMPTY)
-        self._game.set_field(*field2, on_field1)
+        on_field1 = self._engine.read_field(*field1)
+        self._engine.set_field(*field1, STATE.EMPTY)
+        self._engine.set_field(*field2, on_field1)
 
-        if (self._game.moving_player == PLAYER.WHITE):
+        if (self._engine.moving_player == PLAYER.WHITE):
             # Jeżeli teraz ruszał się biały, to
             # teraz jest kolej na czarnego.
-            self._game.moving_player = PLAYER.BLACK
+            self._engine.moving_player = PLAYER.BLACK
         else:
             # Jeżeli w danym ruchu ruszył się czarny,
             # przechodzimy do następnego ruchu.
-            self._game.moving_player = PLAYER.WHITE
-            self._game.move += 1
+            self._engine.moving_player = PLAYER.WHITE
+            self._engine.move += 1
 
     def _in_camp(self, y, x):
         """! Sprawdza w jakim obozie znajduje się pole.

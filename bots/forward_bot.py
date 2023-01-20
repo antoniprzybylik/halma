@@ -78,7 +78,7 @@ class ForwardBot(GameBot):
         @param field1 Pole z którego się ruszamy.
         @param field2 Pole na które się ruszamy.
         """
-        moving_player = self._game.moving_player
+        moving_player = self._engine.moving_player
 
         if (moving_player == PLAYER.WHITE):
             enemy_camp = CAMP.BLACK
@@ -121,8 +121,8 @@ class ForwardBot(GameBot):
     def make_move(self):
         """! Wykonuje ruch. """
 
-        board = self._game.get_board()
-        moving_player = self._game.moving_player
+        board = self._engine.get_board()
+        moving_player = self._engine.moving_player
 
         my_positions = []
         moves_to_consider = []
@@ -138,7 +138,7 @@ class ForwardBot(GameBot):
                     my_positions.append((i, j))
 
         for pos_from in my_positions:
-            for pos_to in self._game.moves(pos_from[0], pos_from[1]):
+            for pos_to in self._engine.moves(pos_from[0], pos_from[1]):
                 moves_to_consider.append((pos_from, pos_to))
 
         moves_to_consider.sort(reverse=True,

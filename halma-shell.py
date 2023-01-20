@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 
 # Powłoka pozwalająca na ręczne wywoływanie
-# metod klasy Game, która jest w pliku halma/game.py.
+# metod klasy Engine, która jest w pliku halma/engine.py.
 #
 # Nie jest to istotna cześć projektu.
 # Dołączam ją licząc na to, że nie
-# przyczyni się do obniżenie oceny
+# przyczyni się do obniżenia oceny
 # projektu, a może ją tylko podwyższyć.
 # Projekt jest kompletny także bez tego
 # pliku.
@@ -16,7 +16,7 @@ import cmd2
 from tabulate import tabulate
 from ast import literal_eval
 
-from halma.game import Game
+from halma.engine import Engine
 from halma.defs import STATE
 
 
@@ -33,8 +33,8 @@ class HaSh(cmd2.Cmd):
 
     # Wewnętrzne struktuty.
     history_file = '.hash_history'
-    games = dict()
-    selected_game = None
+    engines = dict()
+    selected_engine = None
 
     def __init__(self):
         super().__init__(persistent_history_file=self.history_file)
@@ -60,11 +60,11 @@ class HaSh(cmd2.Cmd):
         """
         \033[31;1mDescription:\033[0m
 
-        Creates new game.
+        Creates new game engine.
 
         \033[31;1mUsage schemes:\033[0m
 
-        new <game name>
+        new <engine name>
         """
 
         if (arg_str is None or arg_str == ''):
@@ -77,21 +77,21 @@ class HaSh(cmd2.Cmd):
             print('Error: Too many arguments.')
             return
 
-        if (self.games.get(argv[0], None) is not None):
+        if (self.engines.get(argv[0], None) is not None):
             print('Error: Name already taken.')
             return
 
-        self.games[argv[0]] = Game()
+        self.engines[argv[0]] = Engine()
 
     def do_destroy(self, arg_str):
         """
         \033[31;1mDescription:\033[0m
 
-        Destroys game.
+        Destroys game engine.
 
         \033[31;1mUsage schemes:\033[0m
 
-        destroy <game name>
+        destroy <engine name>
         """
 
         if (arg_str is None or arg_str == ''):
@@ -104,24 +104,24 @@ class HaSh(cmd2.Cmd):
             print('Error: Too many arguments.')
             return
 
-        if (self.games.get(argv[0], None) is None):
-            print('Error: No such game.')
+        if (self.engines.get(argv[0], None) is None):
+            print('Error: No such engine.')
             return
 
-        if (self.games[argv[0]] is self.selected_game):
-            self.selected_game = None
+        if (self.engines[argv[0]] is self.selected_engines):
+            self.selected_engines = None
 
-        self.games.pop(argv[0])
+        self.engines.pop(argv[0])
 
     def do_select(self, arg_str):
         """
         \033[31;1mDescription:\033[0m
 
-        Selects game by name.
+        Selects engines by name.
 
         \033[31;1mUsage schemes:\033[0m
 
-        select <game name>
+        select <engines name>
         """
 
         if (arg_str is None or arg_str == ''):
@@ -134,17 +134,17 @@ class HaSh(cmd2.Cmd):
             print('Error: Too many arguments.')
             return
 
-        if (self.games.get(argv[0], None) is None):
-            print('Error: No such game.')
+        if (self.engines.get(argv[0], None) is None):
+            print('Error: No such engine.')
             return
 
-        self.selected_game = self.games[argv[0]]
+        self.selected_engine = self.engines[argv[0]]
 
     def do_setup(self, arg_str):
         """
         \033[31;1mDescription:\033[0m
 
-        Sets up selected game in requested mode.
+        Sets up game in selected engine in requested mode.
 
         \033[31;1mUsage schemes:\033[0m
 
@@ -161,24 +161,24 @@ class HaSh(cmd2.Cmd):
             print('Error: Too many arguments.')
             return
 
-        game = self.selected_game
+        engine = self.selected_engine
 
-        if (game is None):
-            print('Error: No game selected.')
+        if (engine is None):
+            print('Error: No engine selected.')
             return
 
-        if (argv[0] not in game.supported_modes):
+        if (argv[0] not in engine.supported_modes):
             print('Error: No such game mode.')
             return
 
-        game.setup(argv[0])
+        engine.setup(argv[0])
 
     def do_moves(self, arg_str):
         """
         \033[31;1mDescription:\033[0m
 
         Prints possible moves from given position
-        in selected game.
+        in selected game engine.
 
         \033[31;1mUsage schemes:\033[0m
 
@@ -199,22 +199,22 @@ class HaSh(cmd2.Cmd):
             print('Error: Too many arguments.')
             return
 
-        game = self.selected_game
+        engine = self.selected_engine
 
-        if (game is None):
-            print('Error: No game selected.')
+        if (engine is None):
+            print('Error: No engine selected.')
             return
 
         y = int(argv[0])
         x = int(argv[1])
 
-        print(game.moves(y, x))
+        print(engine.moves(y, x))
 
     def do_list(self, arg_str):
         """
         \033[31;1mDescription:\033[0m
 
-        Lists games.
+        Lists engines.
 
         \033[31;1mUsage schemes:\033[0m
 
@@ -226,13 +226,13 @@ class HaSh(cmd2.Cmd):
             return
 
         table = []
-        for key in self.games.keys():
-            game = self.games[key]
-            mode = game.mode if game.mode is not None else 'custom'
+        for key in self.engines.keys():
+            engine = self.engines[key]
+            mode = engine.mode if engine.mode is not None else 'custom'
 
             pref_str = ''
             suf_str = ''
-            if (game is self.selected_game):
+            if (engine is self.selected_engine):
                 pref_str = '\033[36;1m'
                 suf_str = '\033[0m'
 
@@ -264,13 +264,13 @@ class HaSh(cmd2.Cmd):
         else:
             to_highlight = []
 
-        game = self.selected_game
+        engine = self.selected_engine
 
-        if (game is None):
-            print('Error: No game selected.')
+        if (engine is None):
+            print('Error: No engine selected.')
             return
 
-        board = game.get_board()
+        board = engine.get_board()
 
         for i in range(0, 16):
             for j in range(0, 16):
@@ -314,21 +314,21 @@ class HaSh(cmd2.Cmd):
             print('Error: Too many arguments.')
             return
 
-        game = self.selected_game
+        engine = self.selected_engine
 
-        if (game is None):
-            print('Error: No game selected.')
+        if (engine is None):
+            print('Error: No engine selected.')
             return
 
         y = int(argv[0])
         x = int(argv[1])
 
         if (argv[2] == 'EMPTY'):
-            game.set_field(y, x, STATE.EMPTY)
+            engine.set_field(y, x, STATE.EMPTY)
         elif (argv[2] == 'WHITE'):
-            game.set_field(y, x, STATE.WHITE)
+            engine.set_field(y, x, STATE.WHITE)
         elif (argv[2] == 'BLACK'):
-            game.set_field(y, x, STATE.BLACk)
+            engine.set_field(y, x, STATE.BLACk)
         else:
             raise ValueError('Not a valid value for field.')
 
@@ -357,16 +357,16 @@ class HaSh(cmd2.Cmd):
             print('Error: Too many arguments.')
             return
 
-        game = self.selected_game
+        engine = self.selected_engine
 
-        if (game is None):
-            print('Error: No game selected.')
+        if (engine is None):
+            print('Error: No engine selected.')
             return
 
         y = int(argv[0])
         x = int(argv[1])
 
-        value = game.read_field(y, x)
+        value = engine.read_field(y, x)
         if (value == STATE.EMPTY):
             print('EMPTY')
         elif (value == STATE.WHITE):
