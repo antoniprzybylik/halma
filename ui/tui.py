@@ -116,11 +116,20 @@ class HalmaTui:
         else:
             filename = self._tui.dialog('Enter filename:', 7, 30)
 
-            if (filename is not None):
-                filename = filename.rstrip()
+            while True:
+                if (filename is not None):
+                    filename = filename.rstrip()
 
-                # TODO: Wykrywanie błędów.
-                self._game.load(filename)
+                    try:
+                        self._game.load(filename)
+                    except (ValueError, EnvironmentError):
+                        # Zostajemy w pętli.
+                        pass
+                    else:
+                        break
+
+                filename = self._tui.dialog('Invalid!\n'
+                                            ' Enter filename:', 9, 30)
 
     def _new_game_setup(self):
         """! Funkcja ustawiająca nową grę.
