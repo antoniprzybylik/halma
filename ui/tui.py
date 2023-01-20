@@ -64,13 +64,13 @@ class HalmaTui:
                 winner = self._game_iface.get_winner()
 
                 if (winner == PLAYER.WHITE):
-                    self._ui.splash('White won!')
+                    self._tui.splash('White won!')
 
                     # Kończymy pętlę główną gry.
                     break
 
                 if (winner == PLAYER.BLACK):
-                    self._ui.splash('Black won!')
+                    self._tui.splash('Black won!')
 
                     # Kończymy pętlę główną gry.
                     break
