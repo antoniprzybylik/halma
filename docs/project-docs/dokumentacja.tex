@@ -90,8 +90,9 @@ Celem istnienia tej klasy jest wprowadzenie dodatkowej warstwy
 abstrakcji pomiędzy UI, a silnik gry. Na przykład ruchy wpisane
 przez użytkownika nie są sprawdzane i przetwarzane na współrzędne
 w tych samych funkcjach które wyświetlają UI tylko są przekazywane
-klasie GameInterface, która ma referencję na klasę Engine i wykonuje
-ona ruch.
+klasie GameInterface, która ma referencję na obiekt klasy Engine i wykonuje
+ona ruch. Referencję na obiekt klasy GameInterface ma UI i TuiPlayer,
+który jest obiektem klasy Player implementującym grę przez użytkownika.
 \\~\\
 Klasa Game posiada referencję na obiekty klas: GameInterface, Engine i
 obiekty reprezentujące gracza białego i czarnego (obiekty klas
