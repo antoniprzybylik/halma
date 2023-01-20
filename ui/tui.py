@@ -55,8 +55,6 @@ class HalmaTui:
                         break
 
             if (key == 'm'):
-                # TODO: make_move powinno być w pętli aż nie uda się
-                #       wykonać ruchu.
                 if (self._game_iface.moving_player() == PLAYER.WHITE):
                     self._game.get_player(PLAYER.WHITE).make_move()
                 else:
@@ -80,12 +78,18 @@ class HalmaTui:
             if (key == 's'):
                 filename = self._tui.dialog('Enter filename:', 7, 30)
 
-                if (filename is not None):
+                while True:
+                    if (filename is None):
+                        break
+
                     filename = filename.rstrip()
 
-                    # TODO: Wykrywanie błędów.
-                    # TODO: Zapis będzie w klasie Game.
-                    self._game.save(filename)
+                    success = self._game.save(filename)
+                    if (success):
+                        break
+
+                    filename = self._tui.dialog('Invalid!\n'
+                                                ' Enter filename:', 9, 30)
 
     def _game_setup(self):
         """! Ustawia grę.
