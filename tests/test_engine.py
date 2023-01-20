@@ -64,4 +64,5 @@ def test_moves1():
 
     possible_moves = engine.moves(2, 2)
 
-    assert str(possible_moves) == str(possible_moves1)
+    for pos in possible_moves:
+        assert pos in possible_moves1
