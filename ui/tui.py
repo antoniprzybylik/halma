@@ -5,10 +5,10 @@
 
 from halma.defs import STATE
 from halma.defs import PLAYER
-from halma.defs import OPPONENT
 
 from halma.game import Game
 from halma.iface import GameInterface
+from halma.player import Player
 
 from bots.random_bot import RandomBot
 from bots.forward_bot import ForwardBot
@@ -49,6 +49,9 @@ class HalmaTui:
         self._stdscr = None
         self._game = Game()
         self._game_iface = GameInterface(self._game)
+
+        self._white_player = None
+        self._black_player = None
 
     def _check_scr(self):
         """! Sprawdza, czy można uruchomić grę w trybie TUI.
@@ -113,7 +116,7 @@ class HalmaTui:
 
     def _print_help(self):
         """! Rysuje pasek z pomocą. """
-        help_msg = 'q - quit  m - move  s - save  l - load'
+        help_msg = 'q - quit  m - move  s - save  l - load (to do wywalenia)'
 
         self._stdscr.addstr('  ' + help_msg)
         self._stdscr.addstr('\n')
@@ -148,7 +151,7 @@ class HalmaTui:
 
         self._stdscr.addstr('\n')
 
-    def _dialog(self, text, size_y, size_x):
+    def dialog(self, text, size_y, size_x):
         """! Wyświetla okno dialogowe na środku ekranu.
 
         @param text Tekst w oknie.
@@ -308,6 +311,44 @@ class HalmaTui:
         # Pod szachownicą rysujemy wiersz z podpisami pól.
         self._print_label_row(left_gap_str)
 
+    class _TuiPlayer(Player):
+        """! Gracz przez interfejs TUI """
+        def __init__(self, plr, game, game_iface, ui):
+            """! Konstruktor klasy TuiPlayer.
+
+            @param plr Gracz (czarny/biały)
+            @param game Referencja na obiekt Game
+            @param game_iface Referencja na obiekt GameInterface
+            """
+            self._player = plr
+            self._game = game
+            self._game_iface = game_iface
+            self._ui = ui
+
+        def make_move(self):
+            """! Wykonuje ruch.
+
+            @return Czy udało się wykonać ruch.
+            """
+            move_str = self._ui.dialog('Enter your move:', 7, 30)
+
+            while True:
+                # Sprawdzamy, czy użytkownik nie
+                # zamknął dialog boxa klawiszem escape.
+                if (move_str is None):
+                    return False
+
+                move_str = move_str.rstrip()
+
+                # Próbujemy wykonać ruch.
+                if (self._game_iface.move(move_str)):
+                    return True
+
+                # Dopóki nie udaje się wykonać ruchu wprowadzonego
+                # przez użytkownika: Wczytujemy ruch jeszcze raz.
+                move_str = self._ui.dialog('Invalid!\n Enter your move:',
+                                           8, 30)
+
     def _mainloop(self):
         """! Główna pętla gry. """
 
@@ -319,8 +360,8 @@ class HalmaTui:
             key = self._stdscr.getkey()
 
             if (key == 'q'):
-                msg = self._dialog('Do you really want to quit? '
-                                   'Type \"YES\" to confirm.', 7, 54)
+                msg = self.dialog('Do you really want to quit? '
+                                  'Type \"YES\" to confirm.', 7, 54)
 
                 if (msg is not None):
                     msg = msg.rstrip()
@@ -329,32 +370,13 @@ class HalmaTui:
                         break
 
             if (key == 'm'):
-                move_str = self._dialog('Enter your move:', 7, 30)
-
-                while True:
-                    # Sprawdzamy, czy użytkownik nie
-                    # zamknął dialog boxa klawiszem escape.
-                    if (move_str is None):
-                        break
-
-                    move_str = move_str.rstrip()
-
-                    # Próbujemy wykonać ruch.
-                    if (self._game_iface.move(move_str)):
-                        # FIXME: To bardzo złe miejsce na
-                        #        implementację ruchu bota.
-                        if (self._opponent == OPPONENT.BOT):
-                            self._bot.make_move()
-
-                        break
-
-                    # Dopóki nie udaje się wykonać ruchu wprowadzonego
-                    # przez użytkownika: Wczytujemy ruch jeszcze raz.
-                    move_str = self._dialog('Invalid!\n Enter your move:',
-                                            8, 30)
+                if (self._game_iface.moving_player() == PLAYER.WHITE):
+                    self._white_player.make_move()
+                else:
+                    self._black_player.make_move()
 
             if (key == 's'):
-                filename = self._dialog('Enter filename:', 7, 30)
+                filename = self.dialog('Enter filename:', 7, 30)
 
                 if (filename is not None):
                     filename = filename.rstrip()
@@ -363,7 +385,7 @@ class HalmaTui:
                     self._game_iface.save_game(filename)
 
             if (key == 'l'):
-                filename = self._dialog('Enter filename:', 7, 30)
+                filename = self.dialog('Enter filename:', 7, 30)
 
                 if (filename is not None):
                     filename = filename.rstrip()
@@ -466,34 +488,65 @@ class HalmaTui:
         self._game_setup()
 
     def _game_setup(self):
-        opponent_str = self._dialog('Select your opponent:\n'
-                                    ' 1. Random bot.\n'
-                                    ' 2. Forward bot.\n'
-                                    ' 3. Human.', 11, 54)
+        choice_str = self.dialog('Select white player:\n'
+                                 ' 1. Random bot.\n'
+                                 ' 2. Forward bot.\n'
+                                 ' 3. Human.', 11, 54)
 
         while True:
-            if (opponent_str is None):
+            if (choice_str is None):
                 continue
 
-            opponent_str = opponent_str.rstrip()
-            if (len(opponent_str) == 1 and
-                    ord(opponent_str) in range(ord('1'), ord('3'))):
+            choice_str = choice_str.rstrip()
+            if (len(choice_str) == 1 and
+                    ord(choice_str) in range(ord('1'), ord('4'))):
                 break
 
-            opponent_str = self._dialog('Invalid!\n'
-                                        ' Select your opponent:\n'
-                                        ' 1. Random bot.\n'
-                                        ' 2. Forward bot.\n'
-                                        ' 3. Human.', 12, 54)
+            choice_str = self.dialog('Invalid!\n'
+                                     ' Select white player:\n'
+                                     ' 1. Random bot.\n'
+                                     ' 2. Forward bot.\n'
+                                     ' 3. Human.', 13, 54)
 
-        if (opponent_str == '1'):
-            self._opponent = OPPONENT.BOT
-            self._bot = RandomBot(self._game)
-        elif (opponent_str == '2'):
-            self._opponent = OPPONENT.BOT
-            self._bot = ForwardBot(self._game)
+        if (choice_str == '1'):
+            self._white_player = RandomBot(PLAYER.WHITE, self._game)
+        elif (choice_str == '2'):
+            self._white_player = ForwardBot(PLAYER.WHITE, self._game)
         else:
-            self._opponent = OPPONENT.HUMAN
+            self._white_player = self._TuiPlayer(PLAYER.WHITE,
+                                                 self._game,
+                                                 self._game_iface,
+                                                 self)
+
+        choice_str = self.dialog('Select black player:\n'
+                                 ' 1. Random bot.\n'
+                                 ' 2. Forward bot.\n'
+                                 ' 3. Human.', 11, 54)
+
+        while True:
+            if (choice_str is None):
+                continue
+
+            choice_str = choice_str.rstrip()
+            if (len(choice_str) == 1 and
+                    ord(choice_str) in range(ord('1'), ord('4'))):
+                break
+
+            choice_str = self.dialog('Invalid!\n'
+                                     ' Select black player:\n'
+                                     ' 1. Random bot.\n'
+                                     ' 2. Forward bot.\n'
+                                     ' 3. Human.', 13, 54)
+
+        if (choice_str == '1'):
+            self._black_player = RandomBot(PLAYER.BLACK, self._game)
+        elif (choice_str == '2'):
+            self._black_player = ForwardBot(PLAYER.BLACK, self._game)
+        else:
+            self._black_player = self._TuiPlayer(PLAYER.BLACK,
+                                                 self._game,
+                                                 self._game_iface,
+                                                 self)
 
     def _exit(self):
         """! Funkcja na wyjście z gry. """

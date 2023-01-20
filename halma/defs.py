@@ -20,9 +20,3 @@ class CAMP(Enum):
     """! Obóz. """
     WHITE = 1
     BLACK = 2
-
-
-class OPPONENT(Enum):
-    """! Przeciwnik. """
-    HUMAN = 1
-    BOT = 2

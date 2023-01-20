@@ -1,20 +1,24 @@
-# Implementuje bazową klasę bota.
+# Implementuje bazową klasę bota
+# dziedziczącą po zwykłym graczu.
 #
 # Autor: Antoni Przybylik
 
 from halma.defs import STATE
 from halma.defs import PLAYER
 
+from halma.player import Player
 
-class GameBot:
+
+class GameBot(Player):
     """! Bazowa klasa bota. """
 
-    def __init__(self, game):
+    def __init__(self, plr, game):
         """! Konstruktor klasy GameBot.
 
-        @param game Obiekt klasy Game.
+        @param plr Gracz (biały/czarny).
+        @param game Referencja na obiekt Game.
         """
-        self._game = game
+        super().__init__(plr, game)
 
     def _apply_move(self, field1, field2):
         """! Wykonuje ruch.
