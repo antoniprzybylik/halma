@@ -1,52 +1,39 @@
-# Testy jednostkowe dla metod klasy Game,
-# która jest w pliku halma/game.py.
+# Testy jednostkowe dla metod
+# klasy Game z pliku halma/game.py
 #
 # Autor: Antoni Przybylik
-
-from pytest import raises
-
-from halma.game import Game
-from halma.defs import STATE
-
-
-# Metody set_field, read_field
-#
-# Za ich pomocą można ustawić
-# lub odczytać stan pola na
-# planszy.
-
-
-def test_set_read1():
-    game = Game()
-
-    game.set_field(10, 10, STATE.BLACK)
-    assert game.read_field(10, 10) == STATE.BLACK
-
-
-def test_set_read2():
-    game = Game()
-
-    game.set_field(0, 0, STATE.WHITE)
-    assert game.read_field(0, 0) == STATE.WHITE
-
 
 # Metody save, load
 #
 # Za ich pomocą można zapisywać
 # i wczytywać grę z pliku.
 
+from pytest import raises
+
+from halma.engine import Engine
+from halma.iface import GameInterface
+from halma.game import Game
+
+from halma.defs import PLAYER
+from bots.random_bot import RandomBot
+
 
 def test_save_load1():
-    game = Game()
-    game.setup('random')
+    e = Engine()
+    i = GameInterface(e)
+    e.setup('random')
+    p1, p2 = RandomBot(PLAYER.WHITE, e), RandomBot(PLAYER.BLACK, e)
+    game = Game(e, i, p1, p2)
     game.save('/tmp/random_game.json')
 
-    game2 = Game()
+    e2 = Engine()
+    i2 = GameInterface(e2)
+    game2 = Game(e2, i2)
     game2.load('/tmp/random_game.json')
 
-    assert game.mode == game2.mode
-    assert game.move == game2.move
-    assert str(game._board) == str(game2._board)
+    assert i.current_move() == i2.current_move()
+    assert i.moving_player() == i2.moving_player()
+    assert str(e._board) == str(e2._board)
 
 
 def test_save_load2():
@@ -54,5 +41,7 @@ def test_save_load2():
         fp.write('{"mode": "classic", "move": "aalmakota"}')
 
     with raises(ValueError):
-        game = Game()
+        e = Engine()
+        i = GameInterface(e)
+        game = Game(e, i)
         game.load('/tmp/broken_file.json')
