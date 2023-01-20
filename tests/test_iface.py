@@ -8,6 +8,7 @@ from halma.game import Game
 from halma.iface import GameInterface
 
 from halma.defs import STATE
+from halma.defs import CAMP
 
 # Metoda in_camp.
 #
@@ -19,42 +20,42 @@ def test_in_camp1():
     game = Game()
     game_iface = GameInterface(game)
 
-    assert game_iface.in_camp(0, 0) == 'b'
+    assert game_iface.in_camp(0, 0) == CAMP.BLACK
 
 
 def test_in_camp2():
     game = Game()
     game_iface = GameInterface(game)
 
-    assert game_iface.in_camp(1, 4) == 'b'
+    assert game_iface.in_camp(1, 4) == CAMP.BLACK
 
 
 def test_in_camp3():
     game = Game()
     game_iface = GameInterface(game)
 
-    assert game_iface.in_camp(1, 5) == 'n'
+    assert game_iface.in_camp(1, 5) is None
 
 
 def test_in_camp4():
     game = Game()
     game_iface = GameInterface(game)
 
-    assert game_iface.in_camp(15, 15) == 'w'
+    assert game_iface.in_camp(15, 15) == CAMP.WHITE
 
 
 def test_in_camp5():
     game = Game()
     game_iface = GameInterface(game)
 
-    assert game_iface.in_camp(14, 14) == 'w'
+    assert game_iface.in_camp(14, 14) == CAMP.WHITE
 
 
 def test_in_camp6():
     game = Game()
     game_iface = GameInterface(game)
 
-    assert game_iface.in_camp(8, 8) == 'n'
+    assert game_iface.in_camp(8, 8) is None
 
 
 # Metoda setup.
@@ -75,13 +76,13 @@ def test_setup_classic():
     #   puste pole <=> nie jesteśmy w obozie
     for i in range(16):
         for j in range(16):
-            if (game_iface.in_camp(i, j) == 'w'):
+            if (game_iface.in_camp(i, j) == CAMP.WHITE):
                 assert board[i][j] == STATE.WHITE
 
-            if (game_iface.in_camp(i, j) == 'b'):
+            if (game_iface.in_camp(i, j) == CAMP.BLACK):
                 assert board[i][j] == STATE.BLACK
 
-            if (game_iface.in_camp(i, j) == 'n'):
+            if (game_iface.in_camp(i, j) is None):
                 assert board[i][j] == STATE.EMPTY
 
 
