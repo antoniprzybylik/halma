@@ -45,11 +45,30 @@ class GameInterface:
         return self._game.move
 
     def moving_player(self):
-        """! Zwraca gracza, którego jest ruch jako typ wyliczeniowy player.
+        """! Gracz którego jest ruch w typie wyliczeniowym PLAYER.
 
         @return Gracz, którego jest ruch.
         """
         return self._game.moving_player
+
+    def get_player(self, plr):
+        """! Zwracza gracza o danym kolorze.
+
+        @plr Gracz (biały/czarny).
+
+        @return Obiekt klasy Player.
+        """
+
+        return self._game.get_player(plr)
+
+    def set_player(self, plr, player):
+        """! Ustawia gracza o danym kolorze.
+
+        @plr Gracz (biały/czarny).
+        @player Obiekt klasy Player.
+        """
+
+        return self._game.set_player(plr, player)
 
     def _is_field_label(self, char):
         """! Sprawdza, czy znak jest ważnym podpisem pola.

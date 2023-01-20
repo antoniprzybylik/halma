@@ -50,9 +50,6 @@ class HalmaTui:
         self._game = Game()
         self._game_iface = GameInterface(self._game)
 
-        self._white_player = None
-        self._black_player = None
-
     def _check_scr(self):
         """! Sprawdza, czy można uruchomić grę w trybie TUI.
 
@@ -376,9 +373,9 @@ class HalmaTui:
 
             if (key == 'm'):
                 if (self._game_iface.moving_player() == PLAYER.WHITE):
-                    self._white_player.make_move()
+                    self._game_iface.get_player(PLAYER.WHITE).make_move()
                 else:
-                    self._black_player.make_move()
+                    self._game_iface.get_player(PLAYER.BLACK).make_move()
 
             if (key == 's'):
                 filename = self.dialog('Enter filename:', 7, 30)
@@ -553,14 +550,19 @@ class HalmaTui:
                                      ' 3. Human.', 13, 54)
 
         if (choice_str == '1'):
-            self._white_player = RandomBot(PLAYER.WHITE, self._game)
+            self._game_iface.set_player(PLAYER.WHITE,
+                                        RandomBot(PLAYER.WHITE,
+                                                  self._game))
         elif (choice_str == '2'):
-            self._white_player = ForwardBot(PLAYER.WHITE, self._game)
+            self._game_iface.set_player(PLAYER.WHITE,
+                                        ForwardBot(PLAYER.WHITE,
+                                                   self._game))
         else:
-            self._white_player = self._TuiPlayer(PLAYER.WHITE,
-                                                 self._game,
-                                                 self._game_iface,
-                                                 self)
+            self._game_iface.set_player(PLAYER.WHITE,
+                                        self._TuiPlayer(PLAYER.WHITE,
+                                                        self._game,
+                                                        self._game_iface,
+                                                        self))
 
         choice_str = self.dialog('Select black player:\n'
                                  ' 1. Random bot.\n'
@@ -583,14 +585,19 @@ class HalmaTui:
                                      ' 3. Human.', 13, 54)
 
         if (choice_str == '1'):
-            self._black_player = RandomBot(PLAYER.BLACK, self._game)
+            self._game_iface.set_player(PLAYER.BLACK,
+                                        RandomBot(PLAYER.BLACK,
+                                                  self._game))
         elif (choice_str == '2'):
-            self._black_player = ForwardBot(PLAYER.BLACK, self._game)
+            self._game_iface.set_player(PLAYER.BLACK,
+                                        ForwardBot(PLAYER.BLACK,
+                                                   self._game))
         else:
-            self._black_player = self._TuiPlayer(PLAYER.BLACK,
-                                                 self._game,
-                                                 self._game_iface,
-                                                 self)
+            self._game_iface.set_player(PLAYER.BLACK,
+                                        self._TuiPlayer(PLAYER.BLACK,
+                                                        self._game,
+                                                        self._game_iface,
+                                                        self))
 
     def _exit(self):
         """! Funkcja na wyjście z gry. """

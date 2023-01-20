@@ -31,6 +31,9 @@ class Game:
         self.move = 1  # Obecny ruch.
         self.moving_player = PLAYER.WHITE  # Teraz ruszający się gracz.
 
+        self._white_player = None
+        self._black_player = None
+
     def setup(self, mode):
         """! Ustawia grę.
 
@@ -100,6 +103,31 @@ class Game:
                     break
 
             self._board[i][j] = STATE.WHITE
+
+    def get_player(self, plr):
+        """! Zwracza gracza o danym kolorze.
+
+        @plr Gracz (biały/czarny).
+
+        @return Obiekt klasy Player.
+        """
+
+        if (plr == PLAYER.WHITE):
+            return self._white_player
+        else:
+            return self._black_player
+
+    def set_player(self, plr, player):
+        """! Ustawia gracza o danym kolorze.
+
+        @plr Gracz (biały/czarny).
+        @player Obiekt klasy Player.
+        """
+
+        if (plr == PLAYER.WHITE):
+            self._white_player = player
+        else:
+            self._black_player = player
 
     def moves(self, y, x):
         """! Znajduje wszystkie pola na które można wykonać ruch.
