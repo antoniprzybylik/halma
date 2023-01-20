@@ -208,6 +208,7 @@ class HalmaTui:
     def _exec(self, stdscr):
         """! Funkcja pomocnicza dla exec. """
         self._tui = TuiEngine(stdscr)
+        self._game.set_ui(self._tui)
 
         self._game_setup()
         self._mainloop()

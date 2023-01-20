@@ -27,6 +27,8 @@ class Game:
         self._white_player = white_player
         self._black_player = black_player
 
+        self._ui = None
+
     def get_player(self, which_plr):
         """! Zwracza gracza o danym kolorze.
 
@@ -52,6 +54,10 @@ class Game:
         else:
             self._black_player = player
 
+    def set_ui(self, ui):
+        """! Ustawia referencję na ui. """
+        self._ui = ui
+
     def _player_type_str(self, player):
         """! Zamienia obiekt klasy dziedziczącej po Player na
         napis go identyfikujący. """
@@ -62,14 +68,14 @@ class Game:
         else:
             return 'HUMAN'
 
-    def _create_player_of_type(self, string, plr, game, iface, ui):
+    def _create_player_of_type(self, string, plr):
         """! Tworzy gracza danego typu. """
         if (string == 'RANDOM_BOT'):
-            return RandomBot(plr, game)
+            return RandomBot(plr, self._engine)
         elif (string == 'FORWARD_BOT'):
-            return ForwardBot(plr, game)
+            return ForwardBot(plr, self._engine)
         else:
-            return TuiPlayer(plr, game, ui)
+            return TuiPlayer(plr, self._engine, self._ui)
 
     def save(self, filename):
         to_save = {
@@ -89,5 +95,29 @@ class Game:
             return False
 
     def load(self, filename):
-        # TODO
-        pass
+        # Nie zajmuję się tu obsługą błędów.
+        # Wyjątek ma zostać obsłużony wyżej.
+        with open(filename, 'r') as fp:
+            game_data = json.load(fp)
+
+        engine_state = game_data.get('engine', None)
+        if (engine_state is None):
+            raise ValueError('Corrupted file.')
+
+        self._engine.load_state(engine_state)
+
+        white_player_str = game_data.get('white_player', None)
+        if (white_player_str is None):
+            raise ValueError('Corrupted file.')
+
+        self._white_player = self._create_player_of_type(
+                                            white_player_str,
+                                            PLAYER.WHITE)
+
+        black_player_str = game_data.get('black_player', None)
+        if (black_player_str is None):
+            raise ValueError('Corrupted file.')
+
+        self._black_player = self._create_player_of_type(
+                                            black_player_str,
+                                            PLAYER.BLACK)

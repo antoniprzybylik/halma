@@ -307,13 +307,17 @@ class Engine:
         if (self.mode is None):
             raise ValueError('Corrupted file.')
 
-        self.move = engine_state.get('move', None)
-        if (self.move is None):
+        move_str = engine_state.get('move', None)
+        if (move_str is None):
             raise ValueError('Corrupted file.')
 
-        self.moving_player = engine_state.get('moving_player', None)
-        if (self.moving_player is None):
+        self.move = int(move_str)
+
+        moving_player_str = engine_state.get('moving_player', None)
+        if (moving_player_str is None):
             raise ValueError('Corrupted file.')
+
+        self.moving_player = self._str_to_player(moving_player_str)
 
         str_board = engine_state.get('board', None)
         if (str_board is None):
