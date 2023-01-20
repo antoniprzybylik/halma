@@ -21,7 +21,13 @@ class Game:
     def __init__(self, engine, iface,
                  white_player=None,
                  black_player=None):
-        """! Konstruktor klasy Game. """
+        """! Konstruktor klasy Game.
+
+        @param engine Silnik gry.
+        @param iface Interfejs gry.
+        @param white_player Biały gracz.
+        @param black_player Czarny gracz.
+        """
         self._engine = engine
         self._game_iface = iface
         self._white_player = white_player
@@ -32,7 +38,7 @@ class Game:
     def get_player(self, which_plr):
         """! Zwracza gracza o danym kolorze.
 
-        @plr Gracz (biały/czarny).
+        @which_plr Który gracz (biały/czarny).
 
         @return Obiekt klasy Player.
         """
@@ -45,7 +51,7 @@ class Game:
     def set_player(self, which_plr, player):
         """! Ustawia gracza o danym kolorze.
 
-        @plr Gracz (biały/czarny).
+        @which_plr Gracz (biały/czarny).
         @player Obiekt klasy Player.
         """
 
@@ -55,12 +61,20 @@ class Game:
             self._black_player = player
 
     def set_ui(self, ui):
-        """! Ustawia referencję na ui. """
+        """! Ustawia referencję na ui.
+
+        @param ui Referencja na UI.
+        """
         self._ui = ui
 
     def _player_type_str(self, player):
         """! Zamienia obiekt klasy dziedziczącej po Player na
-        napis go identyfikujący. """
+        napis ją identyfikujący.
+
+        @param player Obiekt podklasy Player.
+
+        @return Napis identyfikujący klasę obiektu player.
+        """
         if (isinstance(player, RandomBot)):
             return 'RANDOM_BOT'
         elif (isinstance(player, ForwardBot)):
@@ -69,7 +83,12 @@ class Game:
             return 'HUMAN'
 
     def _create_player_of_type(self, string, plr):
-        """! Tworzy gracza danego typu. """
+        """! Tworzy gracza danego typu.
+
+        @param string Napis identyfikujący klasę gracza.
+
+        @return Gracz.
+        """
         if (string == 'RANDOM_BOT'):
             return RandomBot(plr, self._engine)
         elif (string == 'FORWARD_BOT'):
@@ -78,6 +97,12 @@ class Game:
             return TuiPlayer(plr, self._engine, self._ui)
 
     def save(self, filename):
+        """! Zapisuje grę do pliku.
+
+        @param filename Nazwa pliku.
+
+        @return Czy się udało.
+        """
         to_save = {
                 'engine': self._engine.dump_state(),
                 'white_player': self._player_type_str(
@@ -94,7 +119,13 @@ class Game:
             # np. nie mamy uprawnień do pliku.
             return False
 
+        return True
+
     def load(self, filename):
+        """! Wczytuje grę z pliku.
+
+        @param filename Nazwa pliku.
+        """
         # Nie zajmuję się tu obsługą błędów.
         # Wyjątek ma zostać obsłużony wyżej.
         with open(filename, 'r') as fp:

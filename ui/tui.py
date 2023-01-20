@@ -24,6 +24,7 @@ class HalmaTui:
     """! Reprezentuje interfejs graficzny. """
 
     def __init__(self):
+        """! Konstruktor klasy HalmaTui. """
         self._engine = Engine()
         self._game_iface = GameInterface(self._engine)
 
@@ -54,6 +55,8 @@ class HalmaTui:
                         break
 
             if (key == 'm'):
+                # TODO: make_move powinno być w pętli aż nie uda się
+                #       wykonać ruchu.
                 if (self._game_iface.moving_player() == PLAYER.WHITE):
                     self._game.get_player(PLAYER.WHITE).make_move()
                 else:
@@ -85,6 +88,12 @@ class HalmaTui:
                     self._game.save(filename)
 
     def _game_setup(self):
+        """! Ustawia grę.
+
+        Funkcja jest wywoływana na początku programu,
+        daje możliwość wczytania gry z pliku lub
+        utworzenia nowej i ustawienia jej ustawień.
+        """
         choice_str = self._tui.dialog('1. New game.\n'
                                       ' 2. Load game.', 8, 54)
 
@@ -110,7 +119,11 @@ class HalmaTui:
                 self._game.load(filename)
 
     def _new_game_setup(self):
-        """! Funkcja ustawiająca nową grę. """
+        """! Funkcja ustawiająca nową grę.
+
+        Ta funkcja jest wywoływana jeśli w _game_setup
+        wybierzemy stworzenie nowej gry.
+        """
         choice_str = self._tui.dialog('Select game setup:\n'
                                       ' 1. Classic.\n'
                                       ' 2. Random.', 9, 54)
@@ -203,7 +216,11 @@ class HalmaTui:
         del self._tui
 
     def _exec(self, stdscr):
-        """! Funkcja pomocnicza dla exec. """
+        """! Funkcja pomocnicza dla exec.
+
+        Ta funkcja jest punktem wejścia,
+        który przekazujemy bibliotece curses.
+        """
         self._tui = TuiEngine(stdscr)
         self._game.set_ui(self._tui)
 

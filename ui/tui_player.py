@@ -3,6 +3,7 @@ from halma.player import Player
 
 class TuiPlayer(Player):
     """! Gracz przez interfejs TUI """
+
     def __init__(self, plr, engine, game_iface, ui):
         """! Konstruktor klasy TuiPlayer.
 

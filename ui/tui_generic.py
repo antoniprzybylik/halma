@@ -26,7 +26,11 @@ class WindowTooSmallError(Exception):
 
 
 class EscapeInterrupt(Exception):
-    """! Przerwanie w celu schowania dialog box'a. """
+    """! Przerwanie w celu schowania dialog box'a.
+
+    Ten wyjątek jest rzucany gdy użytkownik chce
+    wyjść z dialog box'a (np. klawiszem escape).
+    """
     def __init__(self):
         super().__init__()
 
@@ -35,7 +39,19 @@ class TuiEngine:
     """! Reprezentuje interfejs graficzny. """
 
     def __init__(self, stdscr):
-        """! Konstruktor klasy TuiEngine. """
+        """! Konstruktor klasy TuiEngine.
+
+        Sprawdza, czy w danym terminalu da się
+        uruchomić grę.
+
+        Zapisuje jakie są domyślne kolory terminala
+        żeby móc je później odtworzyć bo będziemy je
+        zmieniać.
+
+        Wyłącza pokazywanie kursora itd.
+
+        @param stdscr Ekran curses.
+        """
         self._stdscr = stdscr
 
         # Jeśli check_scr rzuci wyjątek
@@ -60,7 +76,10 @@ class TuiEngine:
         curses.curs_set(0)
 
     def __del__(self):
-        """! Destruktor klasy TuiEngine. """
+        """! Destruktor klasy TuiEngine.
+
+        Przywraca zapisane kolory.
+        """
 
         if (self._saved_colors is not None):
             # Sprzątanie.
@@ -106,6 +125,10 @@ class TuiEngine:
         return (r, g, b)
 
     def getkey(self):
+        """! Czeka aż użytkownik wciśnie dowolny znak.
+
+        @return Wciśnięty znak.
+        """
         return self._stdscr.getkey()
 
     def _print_header(self, move, plr):
@@ -233,6 +256,10 @@ class TuiEngine:
         return input_str
 
     def splash(self, string):
+        """! Wyświetla splashscreen.
+
+        @param string Napis do wyświetlenia.
+        """
         screen_y, screen_x = self._stdscr.getmaxyx()
 
         # Pozycja dialog boxa.
@@ -250,12 +277,12 @@ class TuiEngine:
                          current_move,
                          moving_player,
                          is_in_camp):
-        """! Draws main UI window.
+        """! Rysuje główne okno.
 
-        @param board Game board.
-        @param current_move Current move.
-        @param moving_player Currently moving player.
-        @param is_in_camp Function to check if field is in camp.
+        @param board Plansza do gry.
+        @param current_move Obecny ruch.
+        @param moving_player Gracz którego jest ruch.
+        @param is_in_camp Funkcja sprawdzająca czy gracz jest w obozie.
         """
 
         # Czyścimy ekran

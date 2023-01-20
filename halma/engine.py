@@ -235,7 +235,12 @@ class Engine:
         return value
 
     def _state_to_str(self, value):
-        """! Zamienia obiekt typu wyliczeniowego state na napis. """
+        """! Zamienia wartość typu wyliczeniowego STATE na napis.
+
+        @param value Obiekt typu STATE.
+
+        @return Napis reprezentujący tą wartość.
+        """
 
         if (value == STATE.EMPTY):
             return 'EMPTY'
@@ -247,7 +252,12 @@ class Engine:
         raise ValueError('Unknown state.')
 
     def _str_to_state(self, string):
-        """! Zamienia napis na obiekt typu wyliczeniowego state. """
+        """! Zamienia napis na obiekt typu wyliczeniowego STATE.
+
+        @param string Napis ze stanem pola na planszy.
+
+        @return Stan planszy jako wartość typu wyliczeniowego STATE.
+        """
 
         if (string == 'EMPTY'):
             return STATE.EMPTY
@@ -259,7 +269,12 @@ class Engine:
         raise ValueError('Unknown state.')
 
     def _player_to_str(self, value):
-        """! Zamienia obiekt typu wyliczeniowego player na napis. """
+        """! Zamienia obiekt typu wyliczeniowego PLAYER na napis.
+
+        @param Obiekt typu PLAYER.
+
+        @return Napis reprezentujący tą wartość.
+        """
 
         if (value == PLAYER.WHITE):
             return 'WHITE'
@@ -269,7 +284,12 @@ class Engine:
         raise ValueError('Unknown state.')
 
     def _str_to_player(self, string):
-        """! Zamienia napis na obiekt typu wyliczeniowego player. """
+        """! Zamienia napis na obiekt typu wyliczeniowego PLAYER.
+
+        @param string Napis oznaczający gracza (czarnego/białego).
+
+        @return Gracz jako wartość typu wyliczeniowego STATE.
+        """
 
         if (string == 'WHITE'):
             return PLAYER.WHITE
