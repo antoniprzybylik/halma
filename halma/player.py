@@ -13,10 +13,10 @@
 class Player:
     """! Klasa reprezentująca gracza. """
 
-    def __init__(self, plr, game):
+    def __init__(self, plr, engine):
         """! Konstruktor klasy player. """
         self._player = plr
-        self._game = game
+        self._engine = engine
 
     def make_move(self):
         """! Wykonuje ruch. """

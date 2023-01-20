@@ -1,13 +1,13 @@
 # Zawiera klasę GameInterface, której
 # rolą jest stworzenie warstwy abstrakcji
-# pomiędzy silnikiem (w klasie Game), a
+# pomiędzy silnikiem (w klasie Engine), a
 # użytkownikiem (tzn. modułem korzystającym
 # z tej klasy).
 #
-# Klasa Game wykonuje operacje ściśle związane
+# Klasa Engine wykonuje operacje ściśle związane
 # z grą. Klasa GameInterface obsługuje np.
 # ruch gracza przy pomocy wielu wywołań metod
-# klasy Game.
+# klasy Engine.
 #
 # Autor: Antoni Przybylik
 
@@ -19,56 +19,37 @@ from halma.defs import CAMP
 class GameInterface:
     """! Reprezentuje interfejs gry. """
 
-    def __init__(self, game):
+    def __init__(self, engine):
         """! Konstruktor klasy GameInterface.
 
-        @param game Obiekt klasy Game.
+        @param engine Obiekt klasy Engine.
         """
-        self._game = game
+        self._engine = engine
 
     def get_board(self):
         """! Zwraca planszę do gry.
 
         @return Plansza do gry.
         """
-        return self._game.get_board()
+        return self._engine.get_board()
 
     def setup(self, mode):
         """! Ustawia grę w żądanym stanie. """
-        self._game.setup(mode)
+        self._engine.setup(mode)
 
     def current_move(self):
         """! Zwraca numer obecnego ruchu.
 
         @return Numer ruchu.
         """
-        return self._game.move
+        return self._engine.move
 
     def moving_player(self):
         """! Gracz którego jest ruch w typie wyliczeniowym PLAYER.
 
         @return Gracz, którego jest ruch.
         """
-        return self._game.moving_player
-
-    def get_player(self, plr):
-        """! Zwracza gracza o danym kolorze.
-
-        @plr Gracz (biały/czarny).
-
-        @return Obiekt klasy Player.
-        """
-
-        return self._game.get_player(plr)
-
-    def set_player(self, plr, player):
-        """! Ustawia gracza o danym kolorze.
-
-        @plr Gracz (biały/czarny).
-        @player Obiekt klasy Player.
-        """
-
-        return self._game.set_player(plr, player)
+        return self._engine.moving_player
 
     def _is_field_label(self, char):
         """! Sprawdza, czy znak jest ważnym podpisem pola.
@@ -129,18 +110,18 @@ class GameInterface:
         # Najpierw należy sprawdzić, czy na polu
         # z którego chcemy się ruszyć stoi kamień
         # gracza, który ma teraz swój ruch.
-        if (self._game.moving_player == PLAYER.WHITE):
+        if (self._engine.moving_player == PLAYER.WHITE):
             field_state = STATE.WHITE
         else:
             field_state = STATE.BLACK
 
-        board = self._game.get_board()
+        board = self._engine.get_board()
         if (board[field1[0]][field1[1]] != field_state):
             return False
 
         # Teraz należy sprawdzić, czy z danego pola
         # da się wykonać ruch tam gdzie chcemy.
-        if (field2 not in self._game.moves(*field1)):
+        if (field2 not in self._engine.moves(*field1)):
             return False
 
         return True
@@ -180,19 +161,19 @@ class GameInterface:
         @param field2 Pole na które chcemy się ruszyć.
         """
 
-        on_field1 = self._game.read_field(*field1)
-        self._game.set_field(*field1, STATE.EMPTY)
-        self._game.set_field(*field2, on_field1)
+        on_field1 = self._engine.read_field(*field1)
+        self._engine.set_field(*field1, STATE.EMPTY)
+        self._engine.set_field(*field2, on_field1)
 
-        if (self._game.moving_player == PLAYER.WHITE):
+        if (self._engine.moving_player == PLAYER.WHITE):
             # Jeżeli teraz ruszał się biały, to
             # teraz jest kolej na czarnego.
-            self._game.moving_player = PLAYER.BLACK
+            self._engine.moving_player = PLAYER.BLACK
         else:
             # Jeżeli w danym ruchu ruszył się czarny,
             # przechodzimy do następnego ruchu.
-            self._game.moving_player = PLAYER.WHITE
-            self._game.move += 1
+            self._engine.moving_player = PLAYER.WHITE
+            self._engine.move += 1
 
     def move(self, move_str):
         """! Funkcja wykonująca ruch.
@@ -246,13 +227,10 @@ class GameInterface:
         # TODO: Wszystko.
         pass
 
-    def save_game(self, filename):
-        """! Zapisuje grę do pliku. """
+    def dump_game_state(self):
+        """! Zapisuje stan gry w słowniku.
 
-        self._game.save(filename)
+        @return Engine state.
+        """
 
-    def load_game(self, filename):
-        """! Wczytuje grę z pliku. """
-
-        self._game.load(filename)
-        self.__init__(self._game)
+        return self._engine.dump_state()
