@@ -481,13 +481,11 @@ class HalmaTui:
                                  ' 2. Load game.', 8, 54)
 
         while True:
-            if (choice_str is None):
-                continue
-
-            choice_str = choice_str.rstrip()
-            if (len(choice_str) == 1 and
-                    ord(choice_str) in range(ord('1'), ord('3'))):
-                break
+            if (choice_str is not None):
+                choice_str = choice_str.rstrip()
+                if (len(choice_str) == 1 and
+                        ord(choice_str) in range(ord('1'), ord('3'))):
+                    break
 
             choice_str = self.dialog('1. New game.\n'
                                      ' 2. Load game.', 8, 54)
@@ -511,13 +509,11 @@ class HalmaTui:
                                  ' 2. Random.', 9, 54)
 
         while True:
-            if (choice_str is None):
-                continue
-
-            choice_str = choice_str.rstrip()
-            if (len(choice_str) == 1 and
-                    ord(choice_str) in range(ord('1'), ord('3'))):
-                break
+            if (choice_str is not None):
+                choice_str = choice_str.rstrip()
+                if (len(choice_str) == 1 and
+                        ord(choice_str) in range(ord('1'), ord('3'))):
+                    break
 
             choice_str = self.dialog('Invalid!\n'
                                      ' Select game setup:\n'
@@ -535,19 +531,17 @@ class HalmaTui:
                                  ' 3. Human.', 11, 54)
 
         while True:
-            if (choice_str is None):
-                continue
+            if (choice_str is not None):
+                choice_str = choice_str.rstrip()
+                if (len(choice_str) == 1 and
+                        ord(choice_str) in range(ord('1'), ord('4'))):
+                    break
 
-            choice_str = choice_str.rstrip()
-            if (len(choice_str) == 1 and
-                    ord(choice_str) in range(ord('1'), ord('4'))):
-                break
-
-            choice_str = self.dialog('Invalid!\n'
-                                     ' Select white player:\n'
-                                     ' 1. Random bot.\n'
-                                     ' 2. Forward bot.\n'
-                                     ' 3. Human.', 13, 54)
+                choice_str = self.dialog('Invalid!\n'
+                                         ' Select white player:\n'
+                                         ' 1. Random bot.\n'
+                                         ' 2. Forward bot.\n'
+                                         ' 3. Human.', 13, 54)
 
         if (choice_str == '1'):
             self._game_iface.set_player(PLAYER.WHITE,
@@ -570,13 +564,11 @@ class HalmaTui:
                                  ' 3. Human.', 11, 54)
 
         while True:
-            if (choice_str is None):
-                continue
-
-            choice_str = choice_str.rstrip()
-            if (len(choice_str) == 1 and
-                    ord(choice_str) in range(ord('1'), ord('4'))):
-                break
+            if (choice_str is not None):
+                choice_str = choice_str.rstrip()
+                if (len(choice_str) == 1 and
+                        ord(choice_str) in range(ord('1'), ord('4'))):
+                    break
 
             choice_str = self.dialog('Invalid!\n'
                                      ' Select black player:\n'
