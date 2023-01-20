@@ -64,5 +64,37 @@ def test_moves1():
 
     possible_moves = engine.moves(2, 2)
 
+    assert len(possible_moves) == len(possible_moves1)
     for pos in possible_moves:
         assert pos in possible_moves1
+
+
+possible_moves2 = [(0, 5), (1, 5), (2, 4)]
+
+
+def test_moves2():
+    engine = Engine()
+    game_iface = GameInterface(engine)
+    game_iface.setup('classic')
+
+    possible_moves = engine.moves(0, 4)
+
+    assert len(possible_moves) == len(possible_moves2)
+    for pos in possible_moves:
+        assert pos in possible_moves2
+
+
+possible_moves3 = [(8, 9), (9, 9), (9, 8), (9, 7),
+                   (8, 7), (7, 7), (7, 8), (7, 9)]
+
+
+def test_moves3():
+    engine = Engine()
+    game_iface = GameInterface(engine)
+    game_iface.setup('classic')
+
+    possible_moves = engine.moves(8, 8)
+
+    assert len(possible_moves) == len(possible_moves3)
+    for pos in possible_moves:
+        assert pos in possible_moves3
