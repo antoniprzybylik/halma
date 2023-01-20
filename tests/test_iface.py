@@ -9,6 +9,7 @@ from halma.iface import GameInterface
 
 from halma.defs import STATE
 from halma.defs import CAMP
+from halma.defs import PLAYER
 
 # Metoda in_camp.
 #
@@ -156,3 +157,40 @@ def test_move6():
 
     # Czy uda się wykonać ruch.
     assert game_iface.move('bc-ac') is True
+
+# Metoda get_winner.
+#
+# Ta funkcja sprawdza, czy
+# któryś gracz ma sytuację
+# wygrywającą i jeśli tak jest
+# zwraca który to gracz.
+
+
+def test_winner1():
+    engine = Engine()
+    game_iface = GameInterface(engine)
+    game_iface.setup('classic')
+
+    assert game_iface.get_winner() is None
+
+
+def test_winner2():
+    engine = Engine()
+    game_iface = GameInterface(engine)
+    game_iface.setup('classic')
+
+    engine.set_field(0, 0, STATE.WHITE)
+    engine.set_field(1, 2, STATE.WHITE)
+
+    assert game_iface.get_winner() == PLAYER.WHITE
+
+
+def test_winner3():
+    engine = Engine()
+    game_iface = GameInterface(engine)
+    game_iface.setup('classic')
+
+    engine.set_field(14, 15, STATE.BLACK)
+    engine.set_field(13, 13, STATE.BLACK)
+
+    assert game_iface.get_winner() is PLAYER.BLACK

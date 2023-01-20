@@ -254,8 +254,8 @@ class GameInterface:
                 if (board[15 - i][15 - j] == STATE.EMPTY):
                     all_full = False
 
-                if (board[i][j] == STATE.BLACK):
-                    enemy_in = False
+                if (board[15 - i][15 - j] == STATE.BLACK):
+                    enemy_in = True
 
         if (all_full and enemy_in):
             return PLAYER.BLACK
