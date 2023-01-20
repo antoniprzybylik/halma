@@ -94,7 +94,7 @@ class Game:
         elif (string == 'FORWARD_BOT'):
             return ForwardBot(plr, self._engine)
         else:
-            return TuiPlayer(plr, self._engine, self._ui)
+            return TuiPlayer(plr, self._engine, self._game_iface, self._ui)
 
     def save(self, filename):
         """! Zapisuje grę do pliku.
