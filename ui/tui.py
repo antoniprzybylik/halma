@@ -50,6 +50,11 @@ class HalmaTui:
         self._game = Game()
         self._game_iface = GameInterface(self._game)
 
+        # Obiekt klasy game ma back reference'y
+        # na klasę interfejs i ui.
+        self._game.iface = self._game_iface
+        self._game.ui = self
+
     def _check_scr(self):
         """! Sprawdza, czy można uruchomić grę w trybie TUI.
 

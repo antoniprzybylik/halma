@@ -7,6 +7,16 @@
 from halma.defs import STATE
 from halma.defs import PLAYER
 
+from bots.random_bot import RandomBot
+from bots.forward_bot import ForwardBot
+
+# TODO:
+# Byłby circular import bo tui
+# importuje game. Klasa Game
+# ma brzydkie back reference'y na
+# UI. Coś trzeba z tym zrobić.
+#from ui.tui import HalmaTui
+
 from random import randint
 import json
 
@@ -33,6 +43,9 @@ class Game:
 
         self._white_player = None
         self._black_player = None
+
+        self.iface = None
+        self.ui = None
 
     def setup(self, mode):
         """! Ustawia grę.
@@ -307,6 +320,25 @@ class Game:
 
         raise ValueError('Unknown state.')
 
+    def _player_type_str(self, player):
+        """! Zamienia obiekt klasy dziedziczącej po Player na
+        napis go identyfikujący. """
+        if (isinstance(player, RandomBot)):
+            return 'RANDOM_BOT'
+        elif (isinstance(player, ForwardBot)):
+            return 'FORWARD_BOT'
+        else:
+            return 'HUMAN'
+
+    def _create_player_of_type(self, string, plr, game, iface, ui):
+        """! Tworzy gracza danego typu. """
+        if (string == 'RANDOM_BOT'):
+            return RandomBot(plr, game)
+        elif (string == 'FORWARD_BOT'):
+            return ForwardBot(plr, game)
+        else:
+            return HalmaTui.TuiPlayer(plr, game, ui)
+
     def save(self, filename):
         """! Zapisuje grę do pliku.
 
@@ -324,6 +356,8 @@ class Game:
                 'move': self.move,
                 'moving_player': self._player_to_str(self.moving_player),
                 'board': str_board,
+                'white_player': self._player_type_str(self._white_player),
+                'black_player': self._player_type_str(self._black_player),
         }
 
         try:
@@ -368,3 +402,23 @@ class Game:
         self._board = [[self._str_to_state(str_board[i][j])
                         for j in range(16)]
                        for i in range(16)]
+
+        str_white_player = game_data.get('white_player', None)
+        if (str_white_player is None):
+            raise ValueError('Corrupted file.')
+
+        self._white_player = self._create_player_of_type(str_white_player,
+                                                         PLAYER.WHITE,
+                                                         self,
+                                                         self.iface,
+                                                         self.ui)
+
+        str_black_player = game_data.get('black_player', None)
+        if (str_black_player is None):
+            raise ValueError('Corrupted file.')
+
+        self._black_player = self._create_player_of_type(str_black_player,
+                                                         PLAYER.BLACK,
+                                                         self,
+                                                         self.iface,
+                                                         self.ui)
