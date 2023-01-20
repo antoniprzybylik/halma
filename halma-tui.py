@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
 from ui.tui import HalmaTui
-from ui.tui import TerminalNotSupportedError
-from ui.tui import WindowTooSmallError
+from ui.tui_generic import TerminalNotSupportedError
+from ui.tui_generic import WindowTooSmallError
 
 import sys
 

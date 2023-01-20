@@ -38,6 +38,11 @@ class TuiEngine:
         """! Konstruktor klasy TuiEngine. """
         self._stdscr = stdscr
 
+        # Jeśli check_scr rzuci wyjątek
+        # uruchomi się destruktor i spróbuje
+        # uzyskać dostęp do zmiennej _saved_colors.
+        self._saved_colors = None
+
         # Sprawdzam, czy w danym terminalu
         # można uruchomić grę.
         self._check_scr()
@@ -57,10 +62,11 @@ class TuiEngine:
     def __del__(self):
         """! Destruktor klasy TuiEngine. """
 
-        # Sprzątanie.
-        # Przywracamy zapisane kolory.
-        for i in range(curses.COLORS):
-            curses.init_color(i, *self._saved_colors[i])
+        if (self._saved_colors is not None):
+            # Sprzątanie.
+            # Przywracamy zapisane kolory.
+            for i in range(curses.COLORS):
+                curses.init_color(i, *self._saved_colors[i])
 
     def _check_scr(self):
         """! Sprawdza, czy można uruchomić grę w trybie TUI.

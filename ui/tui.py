@@ -20,25 +20,6 @@ from ui.tui_player import TuiPlayer
 import curses
 
 
-class TerminalNotSupportedError(Exception):
-    """! Wyjątek rzucany gdy terminal nie ma wymaganych funkcji. """
-
-    def __init__(self):
-        super().__init__('Terminal not supported.')
-
-
-class WindowTooSmallError(Exception):
-    """! Wyjątek rzucany gdy okno terminala jest za małe. """
-    def __init__(self):
-        super().__init__('Window is too small.')
-
-
-class EscapeInterrupt(Exception):
-    """! Przerwanie w celu schowania dialog box'a. """
-    def __init__(self):
-        super().__init__()
-
-
 class HalmaTui:
     """! Reprezentuje interfejs graficzny. """
 
