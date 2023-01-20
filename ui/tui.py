@@ -116,7 +116,7 @@ class HalmaTui:
 
     def _print_help(self):
         """! Rysuje pasek z pomocą. """
-        help_msg = 'q - quit  m - move  s - save  l - load (to do wywalenia)'
+        help_msg = 'q - quit  m - move  s - save'
 
         self._stdscr.addstr('  ' + help_msg)
         self._stdscr.addstr('\n')
@@ -206,6 +206,11 @@ class HalmaTui:
         except EscapeInterrupt:
             input_str = None
         curses.curs_set(0)
+
+        # Usuwamy okno.
+        del dialog_box
+        self._stdscr.touchwin()
+        self._stdscr.refresh()
 
         return input_str
 
@@ -384,15 +389,6 @@ class HalmaTui:
                     # TODO: Wykrywanie błędów.
                     self._game_iface.save_game(filename)
 
-            if (key == 'l'):
-                filename = self.dialog('Enter filename:', 7, 30)
-
-                if (filename is not None):
-                    filename = filename.rstrip()
-
-                    # TODO: Wykrywanie błędów.
-                    self._game_iface.load_game(filename)
-
     def _setup_colors(self):
         """! Inicjalizuje kolory, które będą używane w UI. """
 
@@ -481,7 +477,35 @@ class HalmaTui:
         # Wyłącz pokazywanie kursora.
         curses.curs_set(0)
 
-        self._new_game_setup()
+        self._game_setup()
+
+    def _game_setup(self):
+        choice_str = self.dialog('1. New game.\n'
+                                 ' 2. Load game.', 8, 54)
+
+        while True:
+            if (choice_str is None):
+                continue
+
+            choice_str = choice_str.rstrip()
+            if (len(choice_str) == 1 and
+                    ord(choice_str) in range(ord('1'), ord('3'))):
+                break
+
+            choice_str = self.dialog('1. New game.\n'
+                                     ' 2. Load game.', 8, 54)
+
+        if (choice_str == '1'):
+            self._new_game_setup()
+        else:
+            self._stdscr.clear()
+            filename = self.dialog('Enter filename:', 7, 30)
+
+            if (filename is not None):
+                filename = filename.rstrip()
+
+                # TODO: Wykrywanie błędów.
+                self._game_iface.load_game(filename)
 
     def _new_game_setup(self):
         """! Funkcja ustawiająca nową grę. """
