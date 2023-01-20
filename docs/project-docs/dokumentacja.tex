@@ -42,10 +42,61 @@ Bardzo istotną częścią zadania jest opracowanie i zaimplementowanie jak najl
 Moduł realizujący algorytm gry komputera musi być wydzielony.
 
 \section{Cel i opis projektu}
-Ante metus dictum at tempor. Placerat orci nulla pellentesque dignissim enim sit. Integer enim neque volutpat ac tincidunt vitae semper quis. Massa tempor nec feugiat nisl pretium fusce id velit ut. At elementum eu facilisis sed. Ac orci phasellus egestas tellus rutrum tellus. Nunc scelerisque viverra mauris in aliquam sem. Risus nullam eget felis eget nunc lobortis mattis aliquam. Sed euismod nisi porta lorem mollis. Amet commodo nulla facilisi nullam vehicula. Mauris nunc congue nisi vitae. Sit amet nisl purus in mollis nunc sed. Pellentesque pulvinar pellentesque habitant morbi. Ultricies integer quis auctor elit sed. Lobortis scelerisque fermentum dui faucibus in ornare quam. Tristique nulla aliquet enim tortor at auctor urna nunc.
+Celem projektu było napisanie gry Halma w Pythonie,
+przygotowanie testów jednostkowych i dokumentacji.
+W tym celu należało wykorzystać umiejętności zdobyte
+podczas laboratoriów z przedmiotu PIPR.
 
 \section{Architektura}
-Opis architektury rozwiązania: podział programu na moduły z krótkim opisem. W opisie modułu powinien znaleźć się opis głównych klas (chodzi tu o krótki opis każdej z klas, nie należy opisywać każdej z metod/pól. Zdecydowanie nie należy wrzucać kawałków kodu).
+Projekt jest podzielone na trzy główne moduły:
+\begin{itemize}
+\item Silnik gry.
+\item Interfejs użytkownika.
+\item Klasy graczy.
+\end{itemize}
+
+\noindent
+Dodatkowo zawiera jeszcze trzy klasy pomocnicze:
+\begin{itemize}
+\item Silnik UI.
+\item Interfejs gry dla użytkownika.
+\item Klasę Game reprezentującą stan całej gry.
+\end{itemize}
+
+\noindent
+W klasie Engine zaimplementowana jest bazowa
+funkcjonalność programu, między innymi metody
+odpowedzialne za ustawianie/odczyt pól na planszy,
+metody pozwalające na sprawdzenie możliwych ruchów
+z danego pola. W tej klasie jest zapisany stan planszy
+i numer obecnego ruchu.
+\\~\\
+W klasie HalmaTui zaimplementowano tekstowy interfejs
+użytkownika dla gry Halma. Używa on surowych metod do
+rysowania okienek i tak dalej, z klasy TuiEngine.
+\\~\\
+Klasy graczy (dziedziczące po Player) implementują metodę
+make\_move(), która odpowiada za wykonywanie ruchu. W
+przypadku botów ruch jest po prostu wykonywany. Gracze-ludzie
+(TuiPlayer dziedziczący po Player) wyświetlają dialog box'a
+przy użyciu interfejsu klasu TuiEngine (tej samej której używa
+HalmaTui) pytającego gracza o ruch, a potem go wykonują.
+\\~\\
+Silnik UI znajdujący się w klasie TuiEngine implementuje metody
+takie jak: rysująca dialog box'a, wyświetlająca splash screen.
+\\~\\
+Interfejs gry dla użytkownika znajduje się w klasie GameInterface.
+Celem istnienia tej klasy jest wprowadzenie dodatkowej warstwy
+abstrakcji pomiędzy UI, a silnik gry. Na przykład ruchy wpisane
+przez użytkownika nie są sprawdzane i przetwarzane na współrzędne
+w tych samych funkcjach które wyświetlają UI tylko są przekazywane
+klasie GameInterface, która ma referencję na klasę Engine i wykonuje
+ona ruch.
+\\~\\
+Klasa Game posiada referencję na obiekty klas: GameInterface, Engine i
+obiekty reprezentujące gracza białego i czarnego (obiekty klas
+dziedziczących po Player). Ten stan można zapisać do pliku i wczytać
+go z pliku.
 
 \pagebreak
 \section{Wymagania}
@@ -77,6 +128,21 @@ współrzędne pola na które chcemy wykonać ruch. Współrzędne
 to para literek którymi podpisane są pola z boku planszy.
 
 \section{Część refleksyjna}
-Część refleksyjna - tutaj powinniście Państwo podsumować zakres wykonanych prac oraz opisać rzeczy, których nie udało się osiągnąć. Całość proszę opatrzyć komentarzem - dlaczego coś nie został wykonane, na jakie nieprzewidziane przeszkody natrafiliście Państwo, a także co się zmieniło w stosunku do planowanego rozwiązania. W tym miejscu należałoby się też pochwalić, dlaczego Państwa projekt jest dobry i należy mu przyznać wysoką ocenę
+Aplikacja ma przejrzystą architekturę z modułami
+oddzielonymi w sposób przejrzysty bez zagnieżdżania
+i wstecznych referencji (topologia aplikacji jest
+acyklicznym grafem skierowanym).
+\\~\\
+W grze jest możliwość zapisu i wczytania gry, są zaimplementowane
+dwa boty - losowy i sprytny. Jest zaimplementowane wiele testów.
+Interfejs użytkownika jest intuicyjny i łatwy w obsłudze, a
+aplikacja posiada duże możliwości rozszerzenia dzięki enkapsulacji.
+\\~\\
+Przykładowo, można zaimplementować GUI które komunikowało by
+się z resztą aplikacji przez taki sam interfejs jak TUI m. Można
+zaimplementować więcej botów, a nawet możliwość gry zdalnej.
+\\~\\
+Jest nawet możliwość doimplementowania innej wersji TUI na
+bazie interfejsu klasy TuiEngine.
 
 \end{document}
