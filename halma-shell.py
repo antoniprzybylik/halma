@@ -3,9 +3,12 @@
 # Powłoka pozwalająca na ręczne wywoływanie
 # metod klasy Game, która jest w pliku halma/game.py.
 #
-# Nie jest on istotną częścią projektu, dołączam
-# go dlatego, że może on być tylko być na plus,
-# a nie stracę za niego punktów za projekt.
+# Nie jest to istotna cześć projektu.
+# Dołączam ją licząc na to, że nie
+# przyczyni się do obniżenie oceny
+# projektu, a może ją tylko podwyższyć.
+# Projekt jest kompletny także bez tego
+# pliku.
 #
 # Autor: Antoni Przybylik
 
