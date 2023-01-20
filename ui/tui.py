@@ -465,10 +465,6 @@ class HalmaTui:
         }
 
     def _setup(self):
-        """! Funkcja ustawiająca grę. """
-        # FIXME: Trzeba dać do wyboru.
-        self._game_iface.setup('classic')
-
         # Sprawdzam, czy w danym terminalu
         # można uruchomić grę.
         self._check_scr()
@@ -485,9 +481,33 @@ class HalmaTui:
         # Wyłącz pokazywanie kursora.
         curses.curs_set(0)
 
-        self._game_setup()
+        self._new_game_setup()
 
-    def _game_setup(self):
+    def _new_game_setup(self):
+        """! Funkcja ustawiająca nową grę. """
+        choice_str = self.dialog('Select game setup:\n'
+                                 ' 1. Classic.\n'
+                                 ' 2. Random.', 9, 54)
+
+        while True:
+            if (choice_str is None):
+                continue
+
+            choice_str = choice_str.rstrip()
+            if (len(choice_str) == 1 and
+                    ord(choice_str) in range(ord('1'), ord('3'))):
+                break
+
+            choice_str = self.dialog('Invalid!\n'
+                                     ' Select game setup:\n'
+                                     ' 1. Classic.\n'
+                                     ' 2. Random.', 12, 54)
+
+        if (choice_str == '1'):
+            self._game_iface.setup('classic')
+        else:
+            self._game_iface.setup('random')
+
         choice_str = self.dialog('Select white player:\n'
                                  ' 1. Random bot.\n'
                                  ' 2. Forward bot.\n'
