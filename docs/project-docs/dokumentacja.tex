@@ -3,7 +3,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{nunito}
-\usepackage[margin=1.2in]{geometry}
+\usepackage[margin=1in]{geometry}
 \usepackage{ragged2e}
 \usepackage{graphicx}
 \usepackage{grffile}
@@ -42,61 +42,102 @@ Bardzo istotną częścią zadania jest opracowanie i zaimplementowanie jak najl
 Moduł realizujący algorytm gry komputera musi być wydzielony.
 
 \section{Cel i opis projektu}
-Celem projektu było napisanie gry Halma w Pythonie,
+Celem projektu było zaprojektowanie i napisanie gry Halma w
+języku Python,
 przygotowanie testów jednostkowych i dokumentacji.
 W tym celu należało wykorzystać umiejętności zdobyte
-podczas laboratoriów z przedmiotu PIPR.
+na przedmiocie "`Podstawy Informatyki i Programowania"'.
 
+\pagebreak
 \section{Architektura}
 Projekt jest podzielone na trzy główne moduły:
 \begin{itemize}
-\item Silnik gry.
-\item Interfejs użytkownika.
-\item Klasy graczy.
+	\item Silnik gry (klasa Engine).
+	\item Interfejsy użytkownika.
+	\item Klasy graczy (klasy pochodne od Player).
 \end{itemize}
 
 \noindent
-Dodatkowo zawiera jeszcze trzy klasy pomocnicze:
+W silniku zaimplementowano bazową funkcjonalność gry.
+UI odpowiada za komunikację z użytkownikiem. W ramach
+projektu zaimplementowałem tylko jedno UI (w formie TUI),
+ale aplikacja
+jest tak zaprojektowana, że istnieje możliwość stworzenia
+wielu UI, które będą komunikować się z resztą aplikacji
+w taki sam sposób jak HalmaTui (klasa implementująca interfejs TUI).
+Klasy graczy, natomiast, odpowiadają za wykonywanie ruchów,
+mogą to być boty lub ludzie. Kiedy użytkownik zarząda wykonania
+ruchu wciskając odpowiedni przycisk w UI wywoływana jest metoda
+make\_move() dla obecnie ruszającego się gracza. Jeśli ten gracz
+jest botem - po prostu wykonuje ruch. Gracz-Człowiek ma możliwość
+wyświetlenia okna dialogowego z zapytaniem o ruch.
+\\~\\
+W aplikacji wydzieliłem też trzy moduły pomocnicze:
 \begin{itemize}
 \item Silnik UI.
-\item Interfejs gry dla użytkownika.
+\item Interfejs silnika gry dla użytkownika.
 \item Klasę Game reprezentującą stan całej gry.
 \end{itemize}
 
 \noindent
-W klasie Engine zaimplementowana jest bazowa
-funkcjonalność programu, między innymi metody
+Oddzielenie Silnika UI (w klasie TuiEngine) od
+modułu wyświetlającego UI ma przyczynę w tym, że
+elementy UI mają mieć możliwość wyświetlać także
+niektóre obiekty klas pochodnych od Player (gracze-ludzie).
+\\~\\
+Interfejs silnika gry dla użytkownika (w klasie GameInterface)
+ma za zadanie tworzyć warstwę abstrakcji pomiędzy UI, a silnikiem
+gry. Tu przekazywany jest napis, który wpisał użytkownik w okienku
+dialogowym i rozbijany jest on na konkretne współrzędne i
+wykonywany jest ruch wykorzystując niżej-poziomowy interfejs
+silnika gry (w klasie Engine).
+\\~\\
+\textbf{Klasa Engine} implementuje bazową funkcjonalność
+gry. Znajdują tam się między innymi metody
 odpowedzialne za ustawianie/odczyt pól na planszy,
 metody pozwalające na sprawdzenie możliwych ruchów
 z danego pola. W tej klasie jest zapisany stan planszy
 i numer obecnego ruchu.
 \\~\\
-W klasie HalmaTui zaimplementowano tekstowy interfejs
-użytkownika dla gry Halma. Używa on surowych metod do
-rysowania okienek i tak dalej, z klasy TuiEngine.
+\textbf{Klasa HalmaTui} implementuje tekstowy interfejs
+użytkownika (TUI) dla gry Halma. Używa on ogólnych
+elementów interfejsu takich jak okna dialogowe, które
+są dostarczane przez silnik TUI (w klasie TuiEngine).
 \\~\\
-Klasy graczy (dziedziczące po Player) implementują metodę
+\textbf{Klasy pochodne od Player} implementują metodę
 make\_move(), która odpowiada za wykonywanie ruchu. W
 przypadku botów ruch jest po prostu wykonywany. Gracze-ludzie
-(TuiPlayer dziedziczący po Player) wyświetlają dialog box'a
+wyświetlają okno dialogowe
 przy użyciu interfejsu klasu TuiEngine (tej samej której używa
 HalmaTui) pytającego gracza o ruch, a potem go wykonują.
 \\~\\
-Silnik UI znajdujący się w klasie TuiEngine implementuje metody
-takie jak: rysująca dialog box'a, wyświetlająca splash screen.
+\textbf{Klasa GameBot} dziedzicząca po Player jest klasą
+bazową dla wszystkich botów (RandomBot, ForwardBot). Zawiera
+metody wspólne dla wszystkich botów. W klasach pochodnych od
+GameBot są zaimplementowane konkretne algorytmy dla każdego bota.
 \\~\\
-Interfejs gry dla użytkownika znajduje się w klasie GameInterface.
-Celem istnienia tej klasy jest wprowadzenie dodatkowej warstwy
+\textbf{Klasa TuiPlayer} dziedzicząca po Player implementuje
+wykonywanie ruchu przez człowieka. Wyświetla okno dialogowe
+z zapyteniem o ruch, wprowadzony ruch przekazuje do modułu
+GameInterface.
+\\~\\
+\textbf{Klasa TuiEngine} zawiera metody
+takie jak: wyświetlająca okno dialogowe, wyświetlająca splash screen.
+Jest wykorzystywana przez HalmaTui do narysowania okna gry i
+przez TuiPlayer do zapytań o ruch.
+\\~\\
+\textbf{Klasa GameInterface} wprowadza warstwę
 abstrakcji pomiędzy UI, a silnik gry. Na przykład ruchy wpisane
 przez użytkownika nie są sprawdzane i przetwarzane na współrzędne
 w tych samych funkcjach które wyświetlają UI tylko są przekazywane
-klasie GameInterface, która ma referencję na obiekt klasy Engine i wykonuje
+klasie GameInterface, która ma referencję na obiekt klasy Engine
+i wykonuje
 ona ruch. Referencję na obiekt klasy GameInterface ma UI i TuiPlayer,
 który jest obiektem klasy Player implementującym grę przez użytkownika.
 \\~\\
-Klasa Game posiada referencję na obiekty klas: GameInterface, Engine i
+\textbf{Klasa Game} posiada referencję na obiekty klas: GameInterface, Engine i
 obiekty reprezentujące gracza białego i czarnego (obiekty klas
-dziedziczących po Player). Ten stan można zapisać do pliku i wczytać
+pochodnych od Player). Ten stan można zapisać do pliku i wczytać
 go z pliku.
 
 \pagebreak
@@ -114,33 +155,40 @@ W ramach projektu jest zaimplementowany interfejs tekstowy (TUI).
 Grę w trybie TUI otwieramy uruchamiając plik wykonywalny
 halma-tui.py.
 \\~\\
-Komunikacja z programem odbywa się przez dialog boxy.
+Komunikacja z programem odbywa się przez okna dialogowe.
 Są ich dwa rodzaje: Pytające o wybór opcji z listy i
 pytające o inny ciąg znaków.
 \\~\\
-W dialog box'ie pierwszego rodzaju należy wprowadzić w
+W oknie dialogowym pierwszego rodzaju należy wprowadzić w
 polu tekstowym numer wybranej opcji i zatwierdzić
 klawiszem enter.
 \\~\\
-Inaczej postępujemy z dialog box'em pytającym nas o ruch.
+Inaczej postępujemy z oknem dialogowym pytającym nas o ruch.
 W nim należy wprowadzić ruch w formacie "`AB-CD"'\footnote{Wielkość liter nie ma znaczenia, nie należy natomiast wprowadzać spacji wewnątrz zapisu.}, gdzie AB
 to współrzędne pola z krórego chcemy wykonać ruch, CD to
 współrzędne pola na które chcemy wykonać ruch. Współrzędne
-to para literek którymi podpisane są pola z boku planszy.
+to para literek którymi podpisane są pola z boku planszy -
+pierwsza współrzędna z lewej strony planszy, druga współrzędna
+na górze.
+\\~\\
+\textbf{RYSUNEK TOPOLOGIA}
 
+\pagebreak
 \section{Część refleksyjna}
-Aplikacja ma przejrzystą architekturę z modułami
-oddzielonymi w sposób przejrzysty bez zagnieżdżania
-i wstecznych referencji (topologia aplikacji jest
-acyklicznym grafem skierowanym).
+Aplikacja ma przejrzystą architekturę z wyraźnie
+oddzielonymi modułami. W zależnościach modułów nie
+ma cykli. 
 \\~\\
-W grze jest możliwość zapisu i wczytania gry, są zaimplementowane
-dwa boty - losowy i sprytny. Jest zaimplementowane wiele testów.
-Interfejs użytkownika jest intuicyjny i łatwy w obsłudze, a
-aplikacja posiada duże możliwości rozszerzenia dzięki enkapsulacji.
+Interfejs użytkownika jest skalowalny i dostosowywuje się
+do rozmiaru terminala. Sterowanie jest intuicyjne, a kolory
+są dobrane precyzyjnie z dbałością o przejrzystość okna gry.
 \\~\\
-Przykładowo, można zaimplementować GUI które komunikowało by
-się z resztą aplikacji przez taki sam interfejs jak TUI m. Można
+Gra ma możliwość zapisu i wczytania z pliku. Są zaimplementowane
+dwa boty - losowy i sprytny. Są duże możliwości rozszerzenia
+funkcjonalności dzięki podziałowi na moduły. Przykładowo, można
+zaimplementować GUI które komunikowało by
+się z resztą aplikacji przez taki sam interfejs jak już
+napisany tekstowy interfejs. Można
 zaimplementować więcej botów, a nawet możliwość gry zdalnej.
 \\~\\
 Jest nawet możliwość doimplementowania innej wersji TUI na
