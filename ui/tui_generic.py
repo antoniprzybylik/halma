@@ -372,11 +372,11 @@ class TuiEngine:
 
                 if (board[i][j] == STATE.WHITE):
                     attr_key += 'WHITE'
-                    field_char = 'w'
+                    field_char = '♟'
 
                 if (board[i][j] == STATE.BLACK):
                     attr_key += 'BLACK'
-                    field_char = 'm'
+                    field_char = '♟'
 
                 if (board[i][j] == STATE.EMPTY):
                     # I tak nie rysujemy pionka,
