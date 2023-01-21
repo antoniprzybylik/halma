@@ -203,7 +203,16 @@ Są zaimplementowane cztery boty:
 \end{itemize}
 
 \noindent
-Warto zwrócić uwagę
+Dwa ostatnie boty wybierają ruch na podstawie algorytmu MiniMax.
+Na obliczenie ruchu jest limit czasu 10 sekund. Na początku gry,
+gdy możliwych jest do wykonania tylko 30 ruchów przez każdego gracza
+są w stanie wejść cztery ruchy do przodu. Gdy gra się rozwinie może
+nawet dojść do sytuacji, że każdy gracz może wykonać nawet 1000
+różnych
+ruchów. Wtedy nie jesteśmy w stanie przeanalizować gry więcej niż
+dwa ruchy do przodu.
+\\~\\
+Warto też zwrócić uwagę
 na różnicę między botami MinimaxBot i AgressiveMinimaxBot.
 MinimaxBot minimalizuje różnicę odległości od przeciwległego rogu
 pionków swoich i przeciwnika. Jego gra jest zachowawcza. Stara się
