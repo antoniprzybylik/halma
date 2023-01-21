@@ -158,7 +158,8 @@ bibliotekę curses.
 \\~\\
 Interfejs TUI działa tylko w terminalach obsługujących 8-bitowe
 kolory i pozwalających na zmianę ich wartości\footnote{Każdy nowoczesny terminal jak urxvt, xfce4-terminal, gnome-terminal powinien spełniać te wymagania. Gra nie działa w xtermie.}.
-Dodatkowo, jest wymagane żeby okno terminala miało rozmiar co
+Dodatkowo, terminal musi obsługiwać znaki UTF-8.
+Jest wymagane żeby okno terminala miało rozmiar co
 najmniej 40x70\footnote{Wysokość x Szerokość.}.
 
 \section{Instrukcja użycia}
@@ -200,7 +201,8 @@ do rozmiaru terminala. Sterowanie jest intuicyjne, a kolory
 są dobrane precyzyjnie z dbałością o przejrzystość okna gry.
 \\~\\
 Gra ma możliwość zapisu i wczytania z pliku. Są zaimplementowane
-dwa boty - losowy i sprytny. Są duże możliwości rozszerzenia
+trzy boty - losowy, średnio sprytny i mądry. Istnieją duże możliwości
+rozszerzenia
 funkcjonalności dzięki podziałowi na moduły. Przykładowo, można
 zaimplementować GUI które komunikowało by
 się z resztą aplikacji przez taki sam interfejs jak już
