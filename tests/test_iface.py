@@ -99,7 +99,7 @@ def test_move1():
     engine.set_field(2, 1, STATE.BLACK)
 
     # Czy uda się wykonać ruch.
-    assert game_iface.move('bb-cc') is True
+    assert game_iface.move('bb-cc') is not None
 
 
 def test_move2():
@@ -110,7 +110,7 @@ def test_move2():
     engine.set_field(2, 1, STATE.BLACK)
 
     # Czy uda się wykonać ruch.
-    assert game_iface.move('bb-bc') is True
+    assert game_iface.move('bb-bc') is not None
 
 
 def test_move3():
@@ -121,7 +121,7 @@ def test_move3():
     engine.set_field(2, 1, STATE.BLACK)
 
     # Czy uda się wykonać ruch.
-    assert game_iface.move('bb-cb') is False
+    assert game_iface.move('bb-cb') is None
 
 
 def test_move4():
@@ -132,7 +132,7 @@ def test_move4():
     engine.set_field(2, 1, STATE.BLACK)
 
     # Czy uda się wykonać ruch.
-    assert game_iface.move('bb-ac') is True
+    assert game_iface.move('bb-ac') is not None
 
 
 def test_move5():
@@ -144,7 +144,7 @@ def test_move5():
     engine.set_field(3, 4, STATE.BLACK)
 
     # Czy uda się wykonać ruch.
-    assert game_iface.move('bd-ce') is True
+    assert game_iface.move('bd-ce') is not None
 
 
 def test_move6():
@@ -156,7 +156,7 @@ def test_move6():
     engine.set_field(1, 2, STATE.WHITE)
 
     # Czy uda się wykonać ruch.
-    assert game_iface.move('bc-ac') is True
+    assert game_iface.move('bc-ac') is not None
 
 # Metoda get_winner.
 #
