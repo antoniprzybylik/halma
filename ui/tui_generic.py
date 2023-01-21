@@ -147,11 +147,17 @@ class TuiEngine:
         y, x = self._stdscr.getmaxyx()
 
         left_aligned_str = ' HALMA 1.0'
-        right_aligned_str = '|' + moves_bar + '| ' + \
-                            f'move: {move} player: {plr_str} '
-        gap_str = ' ' * (x -
-                         len(left_aligned_str) -
-                         len(right_aligned_str))
+        center_aligned_str = '|' + moves_bar + '|'
+        right_aligned_str = f'move: {move} player: {plr_str} '
+
+        gap_len = x - \
+            len(left_aligned_str) - \
+            len(right_aligned_str) - \
+            len(center_aligned_str)
+
+        gap_str = ' ' * (gap_len//2) + \
+                  center_aligned_str + \
+                  ' ' * (gap_len-gap_len//2)
 
         self._stdscr.addstr(left_aligned_str, self._header_attr)
         self._stdscr.addstr(gap_str, self._header_attr)
