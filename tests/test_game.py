@@ -3,11 +3,6 @@
 #
 # Autor: Antoni Przybylik
 
-# Metody save, load
-#
-# Za ich pomocą można zapisywać
-# i wczytywać grę z pliku.
-
 from pytest import raises
 
 from halma.engine import Engine
@@ -18,7 +13,18 @@ from halma.defs import PLAYER
 from bots.random_bot import RandomBot
 
 
+# Metody save, load
+#
+# Za ich pomocą można zapisywać
+# i wczytywać grę z pliku.
+
+
 def test_save_load1():
+    """
+    Sprawdzamy, czy działa zapis i
+    odczyt z pliku.
+    """
+
     e = Engine()
     i = GameInterface(e)
     e.setup('random')
@@ -37,6 +43,12 @@ def test_save_load1():
 
 
 def test_save_load2():
+    """
+    Sprawdzamy, czy program poprawnie
+    zgłasza wyjątek kiedy chcemy załadować
+    zepsuty plik.
+    """
+
     with open('/tmp/broken_file.json', 'w') as fp:
         fp.write('{"mode": "classic", "move": "aalmakota"}')
 
