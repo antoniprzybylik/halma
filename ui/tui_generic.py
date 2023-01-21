@@ -155,9 +155,14 @@ class TuiEngine:
             len(right_aligned_str) - \
             len(center_aligned_str)
 
-        gap_str = ' ' * (gap_len//2) + \
+        left_gap_len = min(gap_len, gap_len // 2 +
+                           (len(right_aligned_str) -
+                            len(left_aligned_str)) // 2)
+        right_gap_len = gap_len - left_gap_len
+
+        gap_str = ' ' * left_gap_len + \
                   center_aligned_str + \
-                  ' ' * (gap_len-gap_len//2)
+                  ' ' * right_gap_len
 
         self._stdscr.addstr(left_aligned_str, self._header_attr)
         self._stdscr.addstr(gap_str, self._header_attr)
