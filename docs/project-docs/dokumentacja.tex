@@ -156,8 +156,11 @@ najmniej 40x70\footnote{Wysokość x Szerokość.}.
 \section{Instrukcja użycia}
 W ramach projektu jest zaimplementowany interfejs tekstowy (TUI).
 Grę w trybie TUI otwieramy uruchamiając plik wykonywalny
-halma-tui.py. Po odpowiedzeniu na początkowe pytania
-(załadowanie/utworzenie nowej gry) pojawi się plansza do gry.
+halma-tui.py.
+Po tym będziemy mieli opcję załadowania zapisu gry z pliku lub
+utworzenia nowej. Gra może być uruchomiona w ustawieniu klasycznym
+lub losowym. Mamy też możliwość wyboru graczy.
+Po wyborze początkowych ustawień pojawi się plansza do gry.
 \\~\\
 Komunikacja z programem odbywa się przez okna dialogowe.
 Możliwe do wyświetlenia okna dialogowe są wymienione
@@ -191,8 +194,28 @@ Interfejs użytkownika jest skalowalny i dostosowywuje się
 do rozmiaru terminala. Sterowanie jest intuicyjne, a kolory
 są dobrane precyzyjnie z dbałością o przejrzystość okna gry.
 \\~\\
-Gra ma możliwość zapisu i wczytania z pliku. Są zaimplementowane
-trzy boty - losowy, średnio sprytny i mądry. Istnieją duże możliwości
+Są zaimplementowane cztery boty:
+\begin{itemize}
+	\item{RandomBot (wykonujący losowe ruchy)}
+	\item{ForwardBot (ruszający się zawsze naprzód)}
+	\item{MinimaxBot (wykorzystujący algorytm MiniMax)}
+	\item{AgressiveMinimaxBot (wykorzystujący algorytm MiniMax)}
+\end{itemize}
+
+\noindent
+Warto zwrócić uwagę
+na różnicę między botami MinimaxBot i AgressiveMinimaxBot.
+MinimaxBot minimalizuje różnicę odległości od przeciwległego rogu
+pionków swoich i przeciwnika. Jego gra jest zachowawcza. Stara się
+trzymać krawędzi planszy, nie podstawia kamieni tak żeby
+przeciwnik mógł
+je przeskoczyć. Niestety, nie potrafi doprowadzić swoich pionków do
+obozu przeciwnika, woli ruszyć się do tyłu niż żeby przeciwnik
+przeciwnik przeskoczył swoim pionkiem na drugi koniec planszy.
+Próbą odpowiedzi na ten problem jest jego agresywna wersja -
+AgressiveMinimaxBot.
+\\~\\
+Gra ma możliwość zapisu i wczytania z pliku. Istnieją duże możliwości
 rozszerzenia
 funkcjonalności dzięki podziałowi na moduły. Przykładowo, można
 zaimplementować GUI które komunikowało by
