@@ -192,6 +192,36 @@ class TuiEngine:
 
         self._stdscr.addstr('\n')
 
+    def get_message_box(self, text, size_y, size_x):
+        """! Konstruuje okno na środku ekranu.
+
+        @param text Tekst w oknie.
+        @param size_y Wysokość.
+        @param size_x Szerokość.
+
+        @return Uchwyt na okno.
+        """
+
+        screen_y, screen_x = self._stdscr.getmaxyx()
+
+        if (size_y < 3 or size_x < 3):
+            raise ValueError("Too small requested size of message box.")
+
+        if (size_y > screen_y or size_x > screen_x):
+            raise ValueError("Too large requested size of message box.")
+
+        # Pozycja okna.
+        pos_x = (screen_x - size_x) // 2
+        pos_y = (screen_y - size_y) // 2
+
+        window = curses.newwin(size_y, size_x, pos_y, pos_x)
+        window.bkgd(' ', self._dialogbox_attrs['DIALOG'])
+        window.addstr(1, 1, text)
+
+        window.refresh()
+
+        return window
+
     def dialog(self, text, size_y, size_x):
         """! Wyświetla okno dialogowe na środku ekranu.
 
@@ -210,7 +240,7 @@ class TuiEngine:
         if (size_y > screen_y or size_x > screen_x):
             raise ValueError("Too large requested size of dialog box.")
 
-        # Pozycja dialog boxa.
+        # Pozycja okna dialogowego.
         pos_x = (screen_x - size_x) // 2
         pos_y = (screen_y - size_y) // 2
 
@@ -218,7 +248,7 @@ class TuiEngine:
         dialog_box.bkgd(' ', self._dialogbox_attrs['DIALOG'])
         dialog_box.addstr(1, 1, text)
 
-        # Pozycja pola wejściowego w dialog box'ie.
+        # Pozycja pola wejściowego w oknie dialogowym.
         input_window_pos = 3 + (size_y - 4 - 3) // 2
 
         input_window = dialog_box.subwin(3, size_x - 2,

@@ -9,6 +9,7 @@ from halma.engine import Engine
 from halma.iface import GameInterface
 from halma.game import Game
 
+from bots.generic import GameBot
 from bots.random_bot import RandomBot
 from bots.forward_bot import ForwardBot
 from bots.minimax_bot import MinimaxBot
@@ -57,9 +58,21 @@ class HalmaTui:
 
             if (key == 'm'):
                 if (self._game_iface.moving_player() == PLAYER.WHITE):
-                    self._game.get_player(PLAYER.WHITE).make_move()
+                    player = self._game.get_player(PLAYER.WHITE)
                 else:
-                    self._game.get_player(PLAYER.BLACK).make_move()
+                    player = self._game.get_player(PLAYER.BLACK)
+
+                thinking_box = None
+                # Jeżeli gracz jest botem należy
+                # wyświetlić okienko "Myślę...".
+                if (isinstance(player, GameBot)):
+                    thinking_box = self._tui.get_message_box("Thinking...",
+                                                             3, 15)
+
+                player.make_move()
+
+                if (thinking_box is not None):
+                    del thinking_box
 
                 # Sprawdzamy wygraną.
                 winner = self._game_iface.get_winner()
