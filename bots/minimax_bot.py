@@ -166,7 +166,10 @@ class MinimaxBot(GameBot):
         return best_move
 
     def make_move(self):
-        """! Wykonuje ruch. """
+        """! Wykonuje ruch.
+
+        @return Wykonany ruch.
+        """
 
         board = self._engine.get_board()
         moving_player = self._engine.moving_player
@@ -196,3 +199,4 @@ class MinimaxBot(GameBot):
             depth += 1
 
         self._apply_move(*move)
+        return move

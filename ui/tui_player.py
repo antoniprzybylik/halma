@@ -19,7 +19,7 @@ class TuiPlayer(Player):
     def make_move(self):
         """! Wykonuje ruch.
 
-        @return Czy udało się wykonać ruch.
+        @return Wykonany ruch.
         """
         move_str = self._ui.dialog('Enter your move:', 7, 30)
 
@@ -27,13 +27,14 @@ class TuiPlayer(Player):
             # Sprawdzamy, czy użytkownik nie
             # zamknął dialog boxa klawiszem escape.
             if (move_str is None):
-                return False
+                return None
 
             move_str = move_str.rstrip()
 
             # Próbujemy wykonać ruch.
-            if (self._game_iface.move(move_str)):
-                return True
+            move = self._game_iface.move(move_str)
+            if (move is not None):
+                return move
 
             # Dopóki nie udaje się wykonać ruchu wprowadzonego
             # przez użytkownika: Wczytujemy ruch jeszcze raz.

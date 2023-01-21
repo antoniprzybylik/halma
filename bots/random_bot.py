@@ -14,7 +14,10 @@ class RandomBot(GameBot):
     """! Bot wykonujący losowe ruchy. """
 
     def make_move(self):
-        """! Wykonuje ruch. """
+        """! Wykonuje ruch.
+
+        @return Wykonany ruch.
+        """
 
         board = self._engine.get_board()
         moving_player = self._engine.moving_player
@@ -36,4 +39,7 @@ class RandomBot(GameBot):
             for pos_to in self._engine.moves(pos_from[0], pos_from[1]):
                 moves_to_consider.append((pos_from, pos_to))
 
-        self._apply_move(*random.choice(moves_to_consider))
+        move = random.choice(moves_to_consider)
+        self._apply_move(*move)
+
+        return move

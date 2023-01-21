@@ -180,19 +180,19 @@ class GameInterface:
 
         @param move_str Zapis ruchu.
 
-        @return Czy udało się wykonać ruch.
+        @return Wykonany ruch (lub None jeśli się nie udało).
         """
 
         if (not self._validate_move_str(move_str)):
-            return False
+            return None
 
         field1, field2 = self._parse_move(move_str)
 
         if (not self._validate_move(field1, field2)):
-            return False
+            return None
 
         self._apply_move(field1, field2)
-        return True
+        return (field1, field2)
 
     def in_camp(self, y, x):
         """! Sprawdza w jakim obozie znajduje się pole.

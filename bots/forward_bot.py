@@ -119,7 +119,10 @@ class ForwardBot(GameBot):
         return quality
 
     def make_move(self):
-        """! Wykonuje ruch. """
+        """! Wykonuje ruch.
+
+        @return Wykonany ruch.
+        """
 
         board = self._engine.get_board()
         moving_player = self._engine.moving_player
@@ -144,3 +147,4 @@ class ForwardBot(GameBot):
         moves_to_consider.sort(reverse=True,
                                key=lambda m: self._move_quality(*m))
         self._apply_move(*moves_to_consider[0])
+        return moves_to_consider[0]

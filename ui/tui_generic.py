@@ -131,9 +131,10 @@ class TuiEngine:
         """
         return self._stdscr.getkey()
 
-    def _print_header(self, move, plr):
+    def _print_header(self, moves_bar, move, plr):
         """! Rysuje nagłówek.
 
+        @param moves_bar Pasek ruchów.
         @param move Numer ruchu.
         @param player Gracz którego jest ruch.
         """
@@ -146,7 +147,8 @@ class TuiEngine:
         y, x = self._stdscr.getmaxyx()
 
         left_aligned_str = ' HALMA 1.0'
-        right_aligned_str = f'move: {move} player: {plr_str} '
+        right_aligned_str = '|' + moves_bar + '| ' + \
+                            f'move: {move} player: {plr_str} '
         gap_str = ' ' * (x -
                          len(left_aligned_str) -
                          len(right_aligned_str))
@@ -306,12 +308,14 @@ class TuiEngine:
     def draw_main_window(self, board,
                          current_move,
                          moving_player,
+                         moves_bar,
                          is_in_camp):
         """! Rysuje główne okno.
 
         @param board Plansza do gry.
         @param current_move Obecny ruch.
         @param moving_player Gracz którego jest ruch.
+        @param moves_bar Pasek ruchów.
         @param is_in_camp Funkcja sprawdzająca czy gracz jest w obozie.
         """
 
@@ -319,7 +323,7 @@ class TuiEngine:
         self._stdscr.clear()
 
         # Na górze rysujemy nagłówek.
-        self._print_header(current_move, moving_player)
+        self._print_header(moves_bar, current_move, moving_player)
 
         # Pod nagłówkiem rysujemy pasek pomocy.
         self._print_help()

@@ -64,5 +64,8 @@ class GameBot(Player):
         return None
 
     def make_move(self):
-        """! Wykonuje ruch. """
+        """! Wykonuje ruch.
+
+        @return Wykonany ruch.
+        """
         pass

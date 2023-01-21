@@ -34,6 +34,7 @@ class HalmaTui:
         self._game = Game(self._engine, self._game_iface)
 
         self._tui = None
+        self._moves_bar = ' '*40
 
     def _mainloop(self):
         """! Główna pętla gry. """
@@ -42,6 +43,7 @@ class HalmaTui:
             self._tui.draw_main_window(self._game_iface.get_board(),
                                        self._game_iface.current_move(),
                                        self._game_iface.moving_player(),
+                                       self._moves_bar,
                                        self._game_iface.in_camp)
 
             key = self._tui.getkey()
@@ -70,7 +72,11 @@ class HalmaTui:
                     thinking_box = self._tui.get_message_box("Thinking...",
                                                              3, 15)
 
-                player.make_move()
+                move = player.make_move()
+                if (move is not None):
+                    # Aktualizujemy pasek ruchów.
+                    self._moves_bar += str(move)
+                    self._moves_bar = self._moves_bar[-40:]
 
                 if (thinking_box is not None):
                     del thinking_box
