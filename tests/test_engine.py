@@ -5,8 +5,9 @@
 
 from halma.engine import Engine
 from halma.iface import GameInterface
-
 from halma.defs import STATE
+
+import json
 
 
 # Metody set_field, read_field
@@ -35,18 +36,34 @@ def test_set_read2():
 # Za ich pomocą można zapisać stan
 # silnika w słowniku i wczytać stan
 # silnika ze słownika.
+#
+# Zapisane stany silnika do użycia
+# przy testowaniu są w katalogu
+# rc (resources).
 
+def test_dump_load1():
+    with open('rc/engine_state1.json') as fp:
+        state1 = json.load(fp)
 
-state1 = {"mode": "classic", "move": 19, "moving_player": "BLACK", "board": [["EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "BLACK", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY"], ["EMPTY", "EMPTY", "EMPTY", "BLACK", "BLACK", "BLACK", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY"], ["EMPTY", "EMPTY", "BLACK", "BLACK", "BLACK", "BLACK", "BLACK", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY"], ["EMPTY", "EMPTY", "BLACK", "BLACK", "BLACK", "BLACK", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY"], ["EMPTY", "BLACK", "BLACK", "BLACK", "BLACK", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY"], ["EMPTY", "BLACK", "BLACK", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY"], ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY"], ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY"], ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY"], ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "WHITE", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY"], ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "WHITE", "EMPTY", "WHITE", "EMPTY", "EMPTY", "EMPTY"], ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "WHITE", "EMPTY", "EMPTY", "EMPTY", "WHITE", "EMPTY"], ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "WHITE"], ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "WHITE", "WHITE", "WHITE", "WHITE", "WHITE"], ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "WHITE", "EMPTY", "EMPTY", "WHITE", "EMPTY", "WHITE", "WHITE", "WHITE"], ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "WHITE", "EMPTY", "WHITE", "WHITE"]]}  # noqa: E501
-
-
-def test_dump_load():
     engine = Engine()
     engine.load_state(state1)
 
     state2 = engine.dump_state()
     assert str(state1) == str(state2)
 
+
+def test_dump_load2():
+    with open('rc/engine_state2.json') as fp:
+        state1 = json.load(fp)
+
+    engine = Engine()
+    engine.load_state(state1)
+
+    state2 = engine.dump_state()
+    assert str(state1) == str(state2)
+
+
+# TODO: Test broken state.
 
 # Metoda moves.
 #
