@@ -9,7 +9,6 @@ from halma.iface import GameInterface
 from halma.defs import STATE
 
 from pytest import raises
-import json
 
 
 # Metody set_field, read_field
