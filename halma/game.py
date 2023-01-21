@@ -9,6 +9,7 @@ from halma.defs import PLAYER
 
 from bots.random_bot import RandomBot
 from bots.forward_bot import ForwardBot
+from bots.minimax_bot import MinimaxBot
 
 from ui.tui_player import TuiPlayer
 
@@ -79,6 +80,8 @@ class Game:
             return 'RANDOM_BOT'
         elif (isinstance(player, ForwardBot)):
             return 'FORWARD_BOT'
+        elif (isinstance(player, MinimaxBot)):
+            return 'MINIMAX_BOT'
         else:
             return 'HUMAN'
 
@@ -93,6 +96,8 @@ class Game:
             return RandomBot(plr, self._engine)
         elif (string == 'FORWARD_BOT'):
             return ForwardBot(plr, self._engine)
+        elif (string == 'MINIMAX_BOT'):
+            return MinimaxBot(plr, self._engine)
         else:
             return TuiPlayer(plr, self._engine, self._game_iface, self._ui)
 

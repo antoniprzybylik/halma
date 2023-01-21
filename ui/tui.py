@@ -11,6 +11,7 @@ from halma.game import Game
 
 from bots.random_bot import RandomBot
 from bots.forward_bot import ForwardBot
+from bots.minimax_bot import MinimaxBot
 
 from ui.tui_generic import TuiEngine
 from ui.tui_player import TuiPlayer
@@ -161,20 +162,22 @@ class HalmaTui:
         choice_str = self._tui.dialog('Select white player:\n'
                                       ' 1. Random bot.\n'
                                       ' 2. Forward bot.\n'
-                                      ' 3. Human.', 11, 54)
+                                      ' 3. Minimax bot.\n'
+                                      ' 4. Human.', 13, 54)
 
         while True:
             if (choice_str is not None):
                 choice_str = choice_str.rstrip()
                 if (len(choice_str) == 1 and
-                        ord(choice_str) in range(ord('1'), ord('4'))):
+                        ord(choice_str) in range(ord('1'), ord('5'))):
                     break
 
-                choice_str = self._tui.dialog('Invalid!\n'
-                                              ' Select white player:\n'
-                                              ' 1. Random bot.\n'
-                                              ' 2. Forward bot.\n'
-                                              ' 3. Human.', 13, 54)
+            choice_str = self._tui.dialog('Invalid!\n'
+                                          ' Select white player:\n'
+                                          ' 1. Random bot.\n'
+                                          ' 2. Forward bot.\n'
+                                          ' 3. Minimax bot.\n'
+                                          ' 4. Human.', 15, 54)
 
         if (choice_str == '1'):
             self._game.set_player(PLAYER.WHITE,
@@ -183,6 +186,10 @@ class HalmaTui:
         elif (choice_str == '2'):
             self._game.set_player(PLAYER.WHITE,
                                   ForwardBot(PLAYER.WHITE,
+                                             self._engine))
+        elif (choice_str == '3'):
+            self._game.set_player(PLAYER.WHITE,
+                                  MinimaxBot(PLAYER.WHITE,
                                              self._engine))
         else:
             self._game.set_player(PLAYER.WHITE,
@@ -194,20 +201,22 @@ class HalmaTui:
         choice_str = self._tui.dialog('Select black player:\n'
                                       ' 1. Random bot.\n'
                                       ' 2. Forward bot.\n'
-                                      ' 3. Human.', 11, 54)
+                                      ' 3. Minimax bot.\n'
+                                      ' 4. Human.', 13, 54)
 
         while True:
             if (choice_str is not None):
                 choice_str = choice_str.rstrip()
                 if (len(choice_str) == 1 and
-                        ord(choice_str) in range(ord('1'), ord('4'))):
+                        ord(choice_str) in range(ord('1'), ord('5'))):
                     break
 
             choice_str = self._tui.dialog('Invalid!\n'
                                           ' Select black player:\n'
                                           ' 1. Random bot.\n'
                                           ' 2. Forward bot.\n'
-                                          ' 3. Human.', 13, 54)
+                                          ' 3. Minimax bot.\n'
+                                          ' 4. Human.', 15, 54)
 
         if (choice_str == '1'):
             self._game.set_player(PLAYER.BLACK,
@@ -216,6 +225,10 @@ class HalmaTui:
         elif (choice_str == '2'):
             self._game.set_player(PLAYER.BLACK,
                                   ForwardBot(PLAYER.BLACK,
+                                             self._engine))
+        elif (choice_str == '3'):
+            self._game.set_player(PLAYER.BLACK,
+                                  MinimaxBot(PLAYER.BLACK,
                                              self._engine))
         else:
             self._game.set_player(PLAYER.BLACK,
