@@ -8,6 +8,11 @@ from halma.defs import PLAYER
 
 from bots.generic import GameBot
 
+from timeout_decorator import timeout
+from timeout_decorator import TimeoutError
+
+import copy
+
 
 class MinimaxBot(GameBot):
     """! Bot przesuwający kamienie w stronę obozu przeciwnika. """
@@ -165,6 +170,28 @@ class MinimaxBot(GameBot):
         board = self._engine.get_board()
         moving_player = self._engine.moving_player
 
-        move, quality = self._minimax(board, moving_player, 2)
+        # W początkowej sytuacji mamy 30 ruchów
+        # do wykonania i możemy przejrzeć dużo w
+        # przód. W pesymistycznej sytuacji mamy
+        # 1000 ruchów do wykonania i możemy przejrzeć
+        # co najwyżej dwa.
+        @timeout(5)
+        def get_move(board, moving_player, depth):
+            board_copy = copy.deepcopy(board)
+            c_move, c_quality = self._minimax(board_copy, moving_player, depth)
+            return c_move
+
+        timed_out = False
+        depth = 1
+        move = None
+        while (not timed_out):
+            try:
+                computed_move = get_move(board, moving_player, depth)
+            except TimeoutError:
+                timed_out = True
+            else:
+                move = computed_move
+
+            depth += 1
 
         self._apply_move(*move)
