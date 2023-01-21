@@ -331,7 +331,10 @@ class Engine:
         if (move_str is None):
             raise ValueError('Corrupted file.')
 
-        self.move = int(move_str)
+        try:
+            self.move = int(move_str)
+        except ValueError:
+            raise ValueError('Corrupted file.')
 
         moving_player_str = engine_state.get('moving_player', None)
         if (moving_player_str is None):

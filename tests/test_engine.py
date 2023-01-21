@@ -5,8 +5,10 @@
 
 from halma.engine import Engine
 from halma.iface import GameInterface
+
 from halma.defs import STATE
 
+from pytest import raises
 import json
 
 
@@ -42,28 +44,32 @@ def test_set_read2():
 # rc (resources).
 
 def test_dump_load1():
-    with open('rc/engine_state1.json') as fp:
-        state1 = json.load(fp)
+    from tests.rc import engine_state1 as state
 
     engine = Engine()
-    engine.load_state(state1)
+    engine.load_state(state)
 
     state2 = engine.dump_state()
-    assert str(state1) == str(state2)
+    assert str(state) == str(state2)
 
 
 def test_dump_load2():
-    with open('rc/engine_state2.json') as fp:
-        state1 = json.load(fp)
+    from tests.rc import engine_state2 as state
 
     engine = Engine()
-    engine.load_state(state1)
+    engine.load_state(state)
 
     state2 = engine.dump_state()
-    assert str(state1) == str(state2)
+    assert str(state) == str(state2)
 
 
-# TODO: Test broken state.
+def test_dump_load3():
+    from tests.rc import engine_state_broken as state_broken
+
+    with raises(ValueError):
+        engine = Engine()
+        engine.load_state(state_broken)
+
 
 # Metoda moves.
 #
