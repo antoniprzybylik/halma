@@ -15,7 +15,7 @@ import copy
 
 
 class MinimaxBot(GameBot):
-    """! Bot przesuwający kamienie w stronę obozu przeciwnika. """
+    """! Bot używający algorytmu MiniMax. """
 
     def _dist(self, field1, field2):
         """! Odległość dwóch pól.
@@ -23,7 +23,8 @@ class MinimaxBot(GameBot):
         Odległość jest mierzona jako
         liczba ruchów które należy
         wykonać żeby przejść między
-        danymi polami.
+        danymi polami ruszając się
+        o jedno pole.
 
         @param field1 Pole na planszy.
         @param field2 Pole na planszy.
