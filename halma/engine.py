@@ -18,10 +18,10 @@ class ModeError(Exception):
 
 
 class Engine:
-    """! Reprezentuje grę Halma. """
+    """! Reprezentuje silnik gry Halma. """
 
     def __init__(self):
-        """! Konstruktor klasy game. """
+        """! Konstruktor klasy Engine. """
         self._board = [[STATE.EMPTY]*16 for i in range(16)]
 
         self.supported_modes = ['classic', 'random']
